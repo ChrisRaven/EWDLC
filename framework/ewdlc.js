@@ -1,6 +1,5 @@
-// require Preferences.js
-// require Account.js
-/* global Preferences:false */
+import {Preferences} from "./Preferences.js"
+import {Account} from "./Account.js"
 
 /**
  * The main entrypoint of the framework
@@ -10,7 +9,8 @@ function EWDLC() {
     var _isInit = false;
 
     _this.preferences = new Preferences(_this);
-    _this.account = new EWDLC.Account();
+    _this.account = new Account();
+    _this.modules = {};
 
     _this.init = function() {
         if(_isInit) return;
@@ -21,3 +21,8 @@ function EWDLC() {
         _isInit = true;
     };
 }
+
+export {EWDLC}
+export {Preferences} from "./Preferences.js"
+export {Account} from "./Account.js"
+export {Setting} from "./Setting.js"

@@ -7,10 +7,8 @@
         "jquery": true
     },
     "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "sourceType": "script"
+        "ecmaVersion": 8,
+        "sourceType": "module"
     },
     "rules": {
         "no-const-assign": "warn",

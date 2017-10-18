@@ -1,20 +1,26 @@
 var gulp = require("gulp");
-var bundle = require("bundle-js");
+var rollup = require("rollup");
 var UglifyJS = require("uglify-es");
 var fs = require("fs");
 
-gulp.task("build", function() {
-    bundle({
-        entry: "../../init.js",
-        dest: "../../build/ewdlc.js",
-        target: "browser",
-        iife: true
+gulp.task("build", async () => {
+    const bundle = await rollup.rollup({
+        input: "init.js",
+        
     });
+
+    await bundle.write({
+        sourcemap: true,
+        file: "build/ewdlc.js",
+        format: "umd",
+        name: "EWDLC",
+    });
+
     var options = {
         compress: true,
         keep_fnames: true,
         sourceMap: {
-            filename: "ewdlc.min.js",
+            content: fs.readFileSync("build/ewdlc.js.map", "utf8"),
             url: "ewdlc.min.js.map"
         }
     };

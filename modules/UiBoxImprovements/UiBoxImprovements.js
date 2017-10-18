@@ -1,13 +1,12 @@
-// require ../../framework/ewdlc.js
+import {Setting} from "../../framework/Setting.js"
 
 function UiBoxImprovements() {
     var $floatingControls = $("#cubeInspectorFloatingControls");
-    var tc = window.tabbedChat;
     var observer = new MutationObserver(mutated);
 
-    var _floatinsp_top = new window.EWDLC.Setting("uibox-top", null, null);
-    var _floatinsp_left = new window.EWDLC.Setting("uibox-left", null, null);
-    var _floatinsp_cube_tab = new window.EWDLC.Setting("uibox-cube-tab", false, false);
+    var _floatinsp_top = new Setting("uibox-top", null, null);
+    var _floatinsp_left = new Setting("uibox-left", null, null);
+    var _floatinsp_cube_tab = new Setting("uibox-cube-tab", false, false);
 
     function clamp(number, min, max) {
         return Math.max(min, Math.min(number, max));
@@ -96,6 +95,9 @@ function UiBoxImprovements() {
     });
 }
 
-$(document).ready(function() {
-    window.EWDLC.modules.uiBoxImprovements = window.EWDLC.modules.uiBoxImprovements || new UiBoxImprovements();
-});
+function UiBoxImprovementsInit() {
+    window.ewdlc.modules.uiBoxImprovements = window.ewdlc.modules.uiBoxImprovements || new UiBoxImprovements();
+}
+
+export {UiBoxImprovements}
+export {UiBoxImprovementsInit}

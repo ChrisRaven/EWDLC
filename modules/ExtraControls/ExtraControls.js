@@ -1,5 +1,3 @@
-// require ../../framework/ewdlc.js
-
 function ExtraControls() {
     function jumpToCell() {
         if(window.ewdlc.account.isMystic()) {
@@ -120,6 +118,9 @@ function ExtraControls() {
     });
 }
 
-$(document).ready(function() {
-    window.EWDLC.modules.extraControls = window.EWDLC.modules.extraControls || new ExtraControls();
-});
+function ExtraControlsInit() {
+    window.ewdlc.modules.extraControls = window.ewdlc.modules.extraControls || new ExtraControls();
+}
+
+export {ExtraControls}
+export {ExtraControlsInit}

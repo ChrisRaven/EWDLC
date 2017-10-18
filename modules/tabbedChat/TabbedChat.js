@@ -1,9 +1,8 @@
-// require ../../framework/ewdlc.js
-// require Tab.js
-// require TabbedPrefs.js
-// require CommandProcessor.js
+import {Tab} from "./Tab.js"
+import {TabbedPrefs} from "./TabbedPrefs.js"
+import {CommandProcessor} from "./CommandProcessor.js"
 
-/* global Keycodes:false Tab:false */
+/* global Keycodes:false */
 
 function TabbedChat() {
     var _tabs = [];
@@ -466,13 +465,13 @@ function TabbedChat() {
     setInterval(setRemainingChars, 500); // hack to still update remaining chars if the textarea's value gets set using .val()
 }
 
-$(document).ready(function() {
+function TabbedChatInit() {
     $.get("https://crazyman4865.com/eyewire/static/tabchat/customstyle.css").done(function(content) {
         $("<style>").text(content).appendTo($("head"));
         $(".chatInput").trigger("keyup");
     });
 
-    window.EWDLC.modules.tabbedChat = window.EWDLC.modules.tabbedChat || new TabbedChat();
+    window.ewdlc.modules.tabbedChat = window.ewdlc.modules.tabbedChat || new TabbedChat();
 
     // Stop SL bug with R toggling review mode
     var intervalId = window.setInterval(function() {
@@ -482,4 +481,9 @@ $(document).ready(function() {
             window.clearInterval(intervalId);
         }
     }, 1000);
-});
+}
+
+export {TabbedChatInit}
+export {TabbedChat}
+export {Tab} from "./Tab.js"
+export {TabbedPrefs} from "./TabbedPrefs.js"

@@ -1,5 +1,4 @@
-// require Setting.js
-/* global Setting:false */
+import {Setting} from "./Setting.js"
 
 /**
  * Manages and stores settings in local storage
@@ -74,3 +73,5 @@ function Preferences(ewdlc) {
         _isInit = true;
     };
 }
+
+export {Preferences}

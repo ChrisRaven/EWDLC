@@ -78,4 +78,4 @@ function Account(username) {
     };
 }
 
-EWDLC.Account = Account;
+export { Account }

@@ -1,16 +1,14 @@
-// require ../../framework/Setting.js
-
-/* global EWDLC:false */
+import {Setting} from "../../framework/Setting.js"
 
 function TabbedPrefs(callback) {
     var settings = {
-        "tc-show-timestamp": new window.EWDLC.Setting("tc-show-timestamp", true),
-        "tc-show-all-in-tabs": new window.EWDLC.Setting("tc-show-all-in-tabs", true),
-        "tc-show-points-msgs": new window.EWDLC.Setting("tc-show-points-msgs", true),
-        "tc-show-only-all": new window.EWDLC.Setting("tc-show-only-all", false),
-        "tc-disable-unread": new window.EWDLC.Setting("tc-disable-unread", false),
-        "tc-grayout-messages": new window.EWDLC.Setting("tc-grayout-messages", false),
-        "tc-skip-leaderboard": new window.EWDLC.Setting("tc-skip-leaderboard", false)
+        "tc-show-timestamp": new Setting("tc-show-timestamp", true),
+        "tc-show-all-in-tabs": new Setting("tc-show-all-in-tabs", true),
+        "tc-show-points-msgs": new Setting("tc-show-points-msgs", true),
+        "tc-show-only-all": new Setting("tc-show-only-all", false),
+        "tc-disable-unread": new Setting("tc-disable-unread", false),
+        "tc-grayout-messages": new Setting("tc-grayout-messages", false),
+        "tc-skip-leaderboard": new Setting("tc-skip-leaderboard", false)
     };
 
     var self = this;
@@ -69,3 +67,5 @@ function TabbedPrefs(callback) {
 
     $.get("https://crazyman4865.com/eyewire/static/tabchat/settings.html").done(init);
 }
+
+export {TabbedPrefs}

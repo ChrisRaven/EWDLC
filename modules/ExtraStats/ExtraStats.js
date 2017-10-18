@@ -1,5 +1,3 @@
-// require ../../framework/ewdlc.js
-
 function ExtraStats() {
     function addStat(className, id, title) {
         $("<div>").addClass("icon").attr("title", title).addClass(className).appendTo("#funStats");
@@ -156,6 +154,9 @@ function ExtraStats() {
     $(window).resize(checkWindowWidth);
 }
 
-$(document).ready(function() {
-    window.EWDLC.modules.extraStats = window.EWDLC.modules.extraStats || new ExtraStats();
-});
+function ExtraStatsInit() {
+    window.ewdlc.modules.extraStats = window.ewdlc.modules.extraStats || new ExtraStats();
+}
+
+export {ExtraStats}
+export {ExtraStatsInit}

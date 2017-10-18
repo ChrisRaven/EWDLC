@@ -329,3 +329,5 @@ function CommandProcessor(tabbedChat) {
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
 }
+
+export {CommandProcessor}

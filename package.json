@@ -4,11 +4,12 @@
   "description": "",
   "main": "init.js",
   "dependencies": {
-    "bundle-js": "^0.1.1",
     "eslint": "^4.7.2",
     "uglify-js": "^3.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "rollup": "^0.50.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

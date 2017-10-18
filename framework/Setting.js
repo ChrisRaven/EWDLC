@@ -1,5 +1,3 @@
-// require defs.js
-
 /**
  * Holds information about a setting
  * @constructor
@@ -90,8 +88,6 @@ function Setting(name, value, dflt) {
     };
 }
 
-window.EWDLC.Setting = Setting;
-
 /**
  * The callback structure for when a setting changes
  * 
@@ -99,3 +95,5 @@ window.EWDLC.Setting = Setting;
  * @param {string} name The name of the setting which changed
  * @param {*} value The new value of this setting
  */
+
+export { Setting }

@@ -87,3 +87,5 @@ function Tab(options) {
         });
     }
 }
+
+export {Tab}

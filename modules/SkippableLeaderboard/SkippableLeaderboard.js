@@ -1,9 +1,7 @@
-// require ../../framework/ewdlc.js
-
 function SkippableLeaderboard() {
     var original = window.tomni.taskManager.ui.showLeaderboard;
     window.tomni.taskManager.ui.showLeaderboard = function(data) {
-        if(window.EWDLC.modules.tabbedChat.prefs.get("tc-skip-leaderboard")) {
+        if(window.ewdlc.modules.tabbedChat.prefs.get("tc-skip-leaderboard")) {
             data.callback("proceed");
             $("#edit-cube-loader").css("opacity", "0");
             return;
@@ -12,6 +10,9 @@ function SkippableLeaderboard() {
     };
 }
 
-$(document).ready(function() {
-    window.EWDLC.modules.skippableLeaderboard = window.EWDLC.modules.skippableLeaderboard || new SkippableLeaderboard();
-});
+function SkippableLeaderboardInit() {
+    window.ewdlc.modules.skippableLeaderboard = window.ewdlc.modules.skippableLeaderboard || new SkippableLeaderboard();
+}
+
+export {SkippableLeaderboard}
+export {SkippableLeaderboardInit}
