@@ -12,13 +12,15 @@ gulp.task("build", async () => {
     await bundle.write({
         sourcemap: true,
         file: "build/ewdlc.js",
-        format: "umd",
+        format: "iife",
         name: "EWDLC",
     });
 
     var options = {
         compress: true,
-        keep_fnames: true,
+        output: {
+            preamble: "// https://github.com/crazyman4865/EWDLC/blob/master/LICENSE"
+        },
         sourceMap: {
             content: fs.readFileSync("build/ewdlc.js.map", "utf8"),
             url: "ewdlc.min.js.map"
