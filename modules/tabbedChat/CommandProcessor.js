@@ -319,6 +319,20 @@ function CommandProcessor(tabbedChat) {
         window.tomni.chat.addMsg({}, msg);
     }
 
+    function huntGuess(args) {
+        if(!window.tomni.getCurrentCell().info.is_hunt) {
+            window.tomni.chat.addMsg({}, "You must be in a hunt cell to use this command.");
+            return;
+        }
+
+        var center = window.tomni.center.rotation.clone().multiplyScalar(100).round().multiplyScalar(1/100).floor();
+        center = [center.x, center.y, center.z];
+        center = center.join(" ");
+
+        var msg = "/pm thehunt " + center;
+        window.tomni.chat.submitChatMessage(msg);
+    }
+
     this.bind("/help", "", "", help);
     this.bind("/low-wt", "Lists low weight cubes in cell", "/low-wt [cell=this] [limit=15]", lowWt);
     this.bind("/clear", "Clears the chat", "", clear);
@@ -328,6 +342,7 @@ function CommandProcessor(tabbedChat) {
     this.bind("/add-cell", "Adds one or more cells to the overview", "/add-cell Cell ID 1 [Cell ID 2] ...", addCell);
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
+    this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
 }
 
 export {CommandProcessor}
