@@ -5,8 +5,8 @@ $(document).ready(function () {
     let ewdlc = window.ewdlc || new EWDLC();
     window.ewdlc = ewdlc;
     
-    ewdlc.init();
     initModules();
+    ewdlc.init();
 });
 
 export * from "./framework/ewdlc.js"
