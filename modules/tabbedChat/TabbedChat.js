@@ -471,6 +471,8 @@ function TabbedChatInit() {
         $(".chatInput").trigger("keyup");
     });
 
+    $('<script>', {src: 'https://use.fontawesome.com/7745d29f5b.js'}).appendTo('body');
+
     window.ewdlc.modules.tabbedChat = window.ewdlc.modules.tabbedChat || new TabbedChat();
 
     // Stop SL bug with R toggling review mode
