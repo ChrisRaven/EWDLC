@@ -146,10 +146,9 @@ function ExtraStats() {
             addStat("completedCubesIcon", "completedCubes", "Cubes Completed");
             secondSet = $("#funStats div").slice(6, 10);
         }
+        checkWindowWidth();
         window.account.refresh();
     });
-
-    checkWindowWidth();
 
     $(window).resize(checkWindowWidth);
 }
