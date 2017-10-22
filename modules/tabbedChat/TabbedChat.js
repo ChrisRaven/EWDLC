@@ -221,6 +221,36 @@ function TabbedChat() {
             timestamp.hide();
     }
 
+    var coordRegex = /&lt;([0-9]+)(,| |, )([0-9]+)(,| |, )([0-9]+)&gt;/g;
+
+    function openCoord() {
+        let groups = coordRegex.exec($(this).html());
+
+        if(groups) {
+            let x = parseInt(groups[1], 10);
+            let y = parseInt(groups[3], 10);
+            let z = parseInt(groups[5], 10);
+            window.tomni.ui.recenterView(new THREE.Vector3(-x, -y, -z));
+        }
+    }
+
+    function checkCoords($elem) {
+        let html = $elem.html();
+
+        let replaced = html.replace(coordRegex, function(match) {
+            return '<span class="link coords">' + match + '</span>';
+        });
+
+        if (replaced !== html) {
+            $elem.remove();
+
+            $("<div>").addClass("chatMsg").html(replaced).appendTo($(".chatMsgContainer"));
+            return true;
+        }
+
+        return false;
+    }
+
     function addStamp(elem) {
         var date = new Date();
         var hours = date.getHours().toString();
@@ -320,7 +350,8 @@ function TabbedChat() {
     chatInput.focus(function() {filterMessages(); $("#charLeft").fadeIn(200);}).focusout(function () {$("#charLeft").fadeOut(200);});
     $(".chatMsgContainer").bind("DOMNodeInserted", ".chatMsg", function() {
         var elem = $(this).children().last();
-        if(elem.find(".tc-timestamp").length > 0) return;
+        elem.find(".link.coords").on("click.tabbedChat", openCoord);
+        if(elem.find(".tc-timestamp").length > 0 || elem.find(".link.coords").length > 0) return;
 
         elem.find(".taskid").on("click.tabbedChat", clickTask).contextmenu(rclickTask);
 
@@ -334,6 +365,7 @@ function TabbedChat() {
         }
         checkStamp(elem, msg);
         checkPM(msg);
+
         if(shouldBeHidden(msg, elem)) {
             if(msg.hasUsername && _this.prefs.get("tc-grayout-messages") && activeTab.getName() !== "Commands") {
                 elem.find(".actualText").addClass("dialogNobody");
@@ -384,6 +416,8 @@ function TabbedChat() {
         _tabs[index].open();
 
         chatInput.removeClass("pulsing");
+        
+        checkCoords(elem);
     });
 
     chatInput.off("keydown").keydown(function(e) {
