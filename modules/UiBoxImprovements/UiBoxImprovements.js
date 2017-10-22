@@ -83,16 +83,42 @@ function UiBoxImprovements() {
         });
     });
 
-    $floatingControls.find("div.panel.player.selected").bind("DOMNodeInserted", "li", function() {
-        var $li = $(this).children().last();
-        var text = $li.text();
+    // The selector might be empty at this point, so create an interval to check it every half a second
+    var intervalId = setInterval(function () {
+        if($floatingControls.length == 0) {
+            $floatingControls = $("#cubeInspectorFloatingControls");
+            return;
+        }
+        $floatingControls.find("div.panel.player.selected").bind("DOMNodeInserted", "li", function () {
+            let $li = $(this).children().last();
+            let text = $li.text();
 
-        if(text === "No Cube Selected") return;
+            let color;
 
-        $li.on("click.floatinsp", function() {
-            Profile.show({username: text});
+            if($li.hasClass("admin")) {
+                color = Cell.ScytheVisionColors.reap;
+            } else if($li.hasClass("scythe")) {
+                color = Cell.ScytheVisionColors.scythed;
+            } else if($li.hasClass("complete")) {
+                color = Cell.ScytheVisionColors.complete2;
+            } else if($li.hasClass("scout")) {
+                color = Cell.ScytheVisionColors.review;
+            }
+
+            if(color) {
+                $li.css("color", color);
+            }
+
+            if (text === "No Cube Selected") return;
+
+            $li.on("click.floatinsp", function () {
+                Profile.show({
+                    username: text
+                });
+            });
         });
-    });
+        clearInterval(intervalId);
+    }, 500);
 }
 
 function UiBoxImprovementsInit() {
