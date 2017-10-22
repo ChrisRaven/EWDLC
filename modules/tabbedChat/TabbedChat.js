@@ -508,15 +508,6 @@ function TabbedChatInit() {
     $('<script>', {src: 'https://use.fontawesome.com/7745d29f5b.js'}).appendTo('body');
 
     window.ewdlc.modules.tabbedChat = window.ewdlc.modules.tabbedChat || new TabbedChat();
-
-    // Stop SL bug with R toggling review mode
-    var intervalId = window.setInterval(function() {
-        if(document.getElementById("slPanel")) {
-            document.getElementById("slPanel").addEventListener("keypress", function(e) {e.stopPropagation();});
-            console.log("Fixed Scouts' Log Review button bug.");
-            window.clearInterval(intervalId);
-        }
-    }, 1000);
 }
 
 export {TabbedChatInit}

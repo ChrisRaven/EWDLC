@@ -3,13 +3,15 @@ import * as SkippableLeaderboard from "./SkippableLeaderboard/SkippableLeaderboa
 import * as ExtraStats from "./ExtraStats/ExtraStats.js"
 import * as ExtraControls from "./ExtraControls/ExtraControls.js"
 import * as UiBoxImprovements from "./UiBoxImprovements/UiBoxImprovements.js"
+import * as SlHacks from "./SlHacks/SlHacks.js"
 
 var Modules = {
     TabbedChat: TabbedChat,
     SkippableLeaderboard: SkippableLeaderboard,
     ExtraStats: ExtraStats,
     ExtraControls: ExtraControls,
-    UiBoxImprovements: UiBoxImprovements
+    UiBoxImprovements: UiBoxImprovements,
+    SlHacks: SlHacks
 }
 
 function initModules() {
