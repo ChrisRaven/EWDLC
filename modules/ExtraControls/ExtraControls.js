@@ -1,29 +1,58 @@
 function ExtraControls() {
     function jumpToCell() {
-        if(window.ewdlc.account.isMystic()) {
-            var $formHolder = $("<form>").css("display", "inline-block").submit(function(e) {e.preventDefault(); e.stopPropagation();});
-            var $cellInput = $("<input>").attr("type", "text").attr("placeholder", "Jump to cell").attr("size", "10").attr("id", "cellJumpField")
-            .css("margin-left", "25px");
+        if (!window.ewdlc.account.isMystic()) return;
 
-            $cellInput.on("keyup keydown keypress", function(e) {
-                e.stopPropagation();
-            });
+        let $jumpContainer = $("#jumpContainer").clone().detach();
+        let $input = $jumpContainer.find("input");
+        let $button = $jumpContainer.find("button");
 
-            $cellInput.on("keydown", function(e) {
-                if(e.keyCode === 13) {
-                    var num = $cellInput.val();
-                    window.tomni.setCell({id: num}).done(function() {
-                        $cellInput.removeClass("error");
-                    }).fail(function() {
-                        $cellInput.addClass("error");
-                    });
-                }
-            });
+        // Modify the attributes
+        $jumpContainer.css("margin-left", "8px");
 
-            $cellInput.appendTo($formHolder);
-            $formHolder.insertAfter($("#jumpForm"));
-            $("#jumpForm").css("display", "inline-block");
-        }
+        $input.attr("placeholder", "Enter Cell #");
+        $input.attr("id", "cellJumpField");
+
+        $button.attr("disabled", "true");
+        $button.attr("id", "cellJumpButton");
+
+        // Set the event handlers
+        $input.ion('keydown keypress', function (e) {
+			e.stopPropagation();
+        });
+
+        $button.click(function (e) {
+			e.preventDefault();
+
+			var $field = $input.removeClass('error');
+
+			var cid = parseInt($field.val(), 10);
+
+			if (isNaN(cid)) {
+				$field.addClass('error');
+				return false;
+			}
+
+			window.tomni.setCell({id: cid}).fail(function () {
+				$field.addClass('error');
+			});
+
+			return false;
+		});
+        
+        $input.ion('change keyup input', function (e) {
+			e.stopPropagation();
+
+			$button.prop('disabled', $(this).val().length === 0);
+
+			if (e.keyCode !== Keycodes.codes.enter) {
+				$(this).removeClass('error');
+			} else {
+				$button.click();
+			}
+		});
+
+        // Reattach the element
+        $jumpContainer.appendTo("#cubeFinder");
     }
 
     function brushControls() {
