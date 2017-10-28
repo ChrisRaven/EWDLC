@@ -11,52 +11,25 @@ function TabbedPrefs(callback) {
         "tc-skip-leaderboard": new Setting("tc-skip-leaderboard", false)
     };
 
-    var self = this;
+    var lang = [
+        {key: "tc-show-timestamp", lang: "Show Timestamp"},
+        {key: "tc-show-all-in-tabs", lang: "Show Normal Messages in Tabs"},
+        {key: "tc-show-only-all", lang: "Show Only All Messages in All"},
+        {key: "tc-show-points-msgs", lang: "Show Points Messages"},
+        {key: "tc-disable-unread", lang: "Disable Unread Messages Counter"},
+        {key: "tc-grayout-messages", lang: "Show grayed out messages instead of hiding"},
+        {key: "tc-skip-leaderboard", lang: "Don't show leaderboard after submitting cubes"},
+    ]
 
-    this.set = function(setting, value) {
+    var _this = this;
+
+    _this.set = function(setting, value) {
         settings[setting].setValue(value);
     };
 
-    this.get = function(setting) {
+    _this.get = function(setting) {
         return settings[setting].getValue();
     };
-
-    function init(data) {
-        $(data).appendTo("#settingsMenu");
-
-        console.log(settings);
-
-        $("#settingsMenu .tcSettingsGroup input").checkbox().each(function() {
-            var elem = $(this);
-            var input = elem.find("[id]");
-            var setting = input.attr("id");
-            input.prop("checked", settings[setting]);
-            if(settings[setting].getValue()) {
-                elem.removeClass("off").addClass("on");
-            }
-            else {
-                elem.removeClass("on").addClass("off");
-            }
-        });
-        $("#settingsMenu .tcSettingsGroup input").change(function(e) {
-            e.stopPropagation();
-            var elem = $(this);
-            var pref = elem.attr("id");
-            self.set(pref, elem.is(":checked"));
-            //callback();
-        });
-        $("#settingsMenu .tcSettingsGroup .checkbox").click(function(e) {
-            var elem = $(this).find("input");
-            elem.prop("checked", !elem.is(":checked"));
-            elem.change();
-        });
-        $("#settingsMenu .tcSettingsGroup input").closest("div.setting").click(function(e) {
-            e.stopPropagation();
-            var elem = $(this).find("input");
-            elem.prop("checked", !elem.is(":checked"));
-            elem.change();
-        });
-    }
 
     $(window).on("ewdlc-preferences-loading.tabbedChat", function() {
         for(var setting in settings) {
@@ -65,7 +38,11 @@ function TabbedPrefs(callback) {
         }
     });
 
-    $.get("https://crazyman4865.com/eyewire/static/tabchat/settings.html").done(init);
+    $(window).on("ewdlc-preferences-loaded.tabbedChat", function() {
+        for(let i in lang) {
+            window.ewdlc.settingsUi.makeCheckbox(settings[lang[i].key], lang[i].lang);
+        }
+    })
 }
 
 export {TabbedPrefs}

@@ -1,5 +1,6 @@
 import {Preferences} from "./Preferences.js"
 import {Account} from "./Account.js"
+import {SettingsUi} from "./SettingsUi.js"
 
 /**
  * The main entrypoint of the framework
@@ -11,6 +12,7 @@ function EWDLC() {
     _this.preferences = new Preferences(_this);
     _this.account = new Account();
     _this.modules = {};
+    _this.settingsUi = new SettingsUi();
 
     _this.init = function() {
         if(_isInit) return;
@@ -26,3 +28,4 @@ export {EWDLC}
 export {Preferences} from "./Preferences.js"
 export {Account} from "./Account.js"
 export {Setting} from "./Setting.js"
+export {SettingsUi} from "./SettingsUi.js"
