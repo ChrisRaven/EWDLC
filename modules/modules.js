@@ -4,6 +4,7 @@ import * as ExtraStats from "./ExtraStats/ExtraStats.js"
 import * as ExtraControls from "./ExtraControls/ExtraControls.js"
 import * as UiBoxImprovements from "./UiBoxImprovements/UiBoxImprovements.js"
 import * as SlHacks from "./SlHacks/SlHacks.js"
+import * as CellColorPicker from "./CellColorPicker/CellColorPicker.js"
 
 var Modules = {
     TabbedChat: TabbedChat,
@@ -11,7 +12,8 @@ var Modules = {
     ExtraStats: ExtraStats,
     ExtraControls: ExtraControls,
     UiBoxImprovements: UiBoxImprovements,
-    SlHacks: SlHacks
+    SlHacks: SlHacks,
+    CellColorPicker: CellColorPicker
 }
 
 function initModules() {
