@@ -212,9 +212,15 @@ function CommandProcessor(tabbedChat) {
         window.tomni.chat.history.add(args.join(' '));
         window.tomni.chat.addMsg({}, "Please wait while Grim's minions collect some data...");
 
-        $.get("/1.0/cell/" + cellId + "/tasks").done(function(tasks) {
-            var potentialTasks = tasks.tasks.map(function(elem) {return elem.id;});
-            $.get("/1.0/cell/" + cellId + "/heatmap/scythe").done(function(scytheData) {
+        $.when($.getJSON("/1.0/cell/" + cellId + "/tasks"), $.getJSON("/1.0/cell/" + cellId + "/heatmap/scythe"),
+               $.getJSON("/1.0/cell/" + cellId + "/tasks/complete/player"), $.getJSON("/1.0/cell/" + cellId + "/heatmap/low-weight?weight=3"))
+            .done(function(tasks, scytheData, completeData, data) {
+                tasks = tasks[0];
+                scytheData = scytheData[0];
+                completeData = completeData[0];
+                data = data[0];
+
+                var potentialTasks = tasks.tasks.map(function(elem) {return elem.id;});
                 var frozen = scytheData.frozen || [];
                 var complete = scytheData.complete || [];
 
@@ -231,43 +237,37 @@ function CommandProcessor(tabbedChat) {
 
                 cleanTasks(potentialTasks, frozen);
 
-                $.get("/1.0/cell/" + cellId + "/tasks/complete/player").done(function(completeData) {
-                    completeData = JSON.parse(completeData);
-                    var myTasks = completeData.scythe[window.account.account.uid.toString()] || [];
+                var myTasks = completeData.scythe[window.account.account.uid.toString()] || [];
 
-                    cleanTasks(potentialTasks, myTasks);
+                cleanTasks(potentialTasks, myTasks);
 
-                    $.get("/1.0/cell/" + cellId + "/heatmap/low-weight?weight=3").done(function(data) {
-                        var count = 0;
+                var count = 0;
 
-                        var msg = "Scythe info for cell " + cellId + " (limit " + limit + "):\n";
-                        var anyArr = [];
+                var msg = "Scythe info for cell " + cellId + " (limit " + limit + "):\n";
 
-                        msg += "Your SC count: " + myTasks.length + "\n";
+                msg += "Your SC count: " + myTasks.length + "\n";
 
-                        if(data["0"]) cleanTasks(potentialTasks, data["0"].map(function(elem) {return elem.task_id;}));
-                        if(data["1"]) cleanTasks(potentialTasks, data["1"].map(function(elem) {return elem.task_id;}));
-                        if(data["2"]) cleanTasks(potentialTasks, data["2"].map(function(elem) {return elem.task_id;}));
+                if(data["0"]) cleanTasks(potentialTasks, data["0"].map(function(elem) {return elem.task_id;}));
+                if(data["1"]) cleanTasks(potentialTasks, data["1"].map(function(elem) {return elem.task_id;}));
+                if(data["2"]) cleanTasks(potentialTasks, data["2"].map(function(elem) {return elem.task_id;}));
 
-                        msg += "Cubes you can SC: " + potentialTasks.length + "\n";
+                msg += "Cubes you can SC: " + potentialTasks.length + "\n";
 
-                        if(potentialTasks.length > 0) {
-                            msg += "List:\n ";
+                if(potentialTasks.length > 0) {
+                    msg += "List:\n ";
 
-                            for(var i = 0; i < potentialTasks.length; i++) {
-                                msg += "#" + potentialTasks[i] + " ";
+                    for(var i = 0; i < potentialTasks.length; i++) {
+                        msg += "#" + potentialTasks[i] + " ";
 
-                                count++;
-                                if(count === limit)
-                                    break;
-                            }
-                        }
+                        count++;
+                        if(count === limit)
+                            break;
+                    }
+                }
 
-                        window.tomni.chat.addMsg({}, msg);
-                    }).fail(err);
-                }).fail(err);
-            }).fail(err);
-        }).fail(err);
+                window.tomni.chat.addMsg({}, msg);
+            })
+            .fail(err);
     }
 
     function addCell(args) {
