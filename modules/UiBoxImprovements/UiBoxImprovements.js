@@ -53,10 +53,11 @@ function UiBoxImprovements() {
             var cubeNum = parseInt(cubes[i], 10);
 
             $span.text(cubes[i]);
+            $span.data("target", cubeNum);
 
             $span.click(function(e) {
                 $(this).addClass("clicked");
-                window.tomni.jumpToTaskID(cubeNum);
+                window.tomni.jumpToTaskID($(this).data("target"));
                 e.stopPropagation();
             });
 
