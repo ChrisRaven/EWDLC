@@ -83,6 +83,10 @@ function TabbedChat() {
             text.includes(" scouted a cube for");
     }
 
+    function isCrewMsg(text) {
+        return text.includes(" joined crew ");
+    }
+
     function shouldBeHidden(msg, elem) {
         var username = msg.username.toLowerCase();
         var hasUsername = msg.hasUsername;
@@ -107,7 +111,8 @@ function TabbedChat() {
         }
 
         if(activeTab.getName() === "Commands") {
-            if(hasUsername || isPointMsg(elem.find(".dialogNobody").text())) return true;
+            var msgText = elem.find(".dialogNobody").text();
+            if(hasUsername || isPointMsg(msgText) || isCrewMsg(msgText)) return true;
             if(elem.find(".special,.generic").length > 0) return true;
 
             return false;
@@ -467,7 +472,7 @@ function TabbedChat() {
                     _this.commandProcessor.exec(chatMsg);
                     return false;
                 }
-                
+
                 if(_this.commandProcessor.exec(chatMsg))
                     return false;
             }
