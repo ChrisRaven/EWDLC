@@ -38,6 +38,54 @@ function UiBoxImprovements() {
         clampAndSetCoords(parsePx(top), parsePx(left));
     }
 
+    function linkifyCubes(elem, observer) {
+        var cubesText = elem.text();
+
+        if(cubesText === '-')
+            return;
+
+        elem.empty();
+
+        var cubes = cubesText.split(", ");
+
+        for(var i = 0; i < cubes.length; i++) {
+            var $span = $("<span>").addClass("link");
+            var cubeNum = parseInt(cubes[i], 10);
+
+            $span.text(cubes[i]);
+
+            $span.click(function(e) {
+                $(this).addClass("clicked");
+                window.tomni.jumpToTaskID(cubeNum);
+                e.stopPropagation();
+            });
+
+            elem.append($span);
+            if(i < cubes.length - 1)
+                elem.append(", ");
+        }
+
+        observer.takeRecords();
+    }
+
+    function bindLinkifier(elem) {
+        elem.addClass("tc");
+
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if(mutation.addedNodes.length == 0) return;
+                
+                var $target = $(mutation.target);
+
+                if(elem.children(".link").length > 0) return;
+
+                linkifyCubes($target, observer);
+            });
+        });
+
+        observer.observe(elem[0], { childList: true, characterData: true });
+    }
+
     function parsePx(px) {
         return parseInt(px.replace("px", "").trim(), 10);
     }
@@ -117,6 +165,10 @@ function UiBoxImprovements() {
                 });
             });
         });
+
+        bindLinkifier($floatingControls.find(".panel.cube > .parent_task > .value"));
+        bindLinkifier($floatingControls.find(".panel.cube > .child_tasks > .value"));
+
         clearInterval(intervalId);
     }, 500);
 }
