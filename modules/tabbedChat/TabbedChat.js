@@ -428,7 +428,7 @@ function TabbedChat() {
         if(e.keyCode !== Keycodes.codes.shift && !e.metaKey && !e.ctrlKey) {
             e.stopPropagation();
         }
-        var val = $(this).val();
+        var chatMsg = $(this).val();
 
         if(e.keyCode === Keycodes.codes.enter) {
             if(!!e.shiftKey || e.metaKey || e.ctrlKey) {
@@ -438,10 +438,10 @@ function TabbedChat() {
             $(this).val("");
             window.tomni.chat.history.locator = -1;
 
-            var index = _tabs.findIndex(function(elem) {return elem.getName() !== "All" && elem.getName() !== "Commands" && val.startsWith(elem.getPrefix());});
+            var index = _tabs.findIndex(function(elem) {return elem.getName() !== "All" && elem.getName() !== "Commands" && chatMsg.startsWith(elem.getPrefix());});
 
             if(index >= 0) {
-                var prefixLess = val.substring(_tabs[index].getPrefix().length);
+                var prefixLess = chatMsg.substring(_tabs[index].getPrefix().length);
                 if(prefixLess.startsWith("/")) {
                     $(this).val(_tabs[index].getPrefix());
 
@@ -458,17 +458,21 @@ function TabbedChat() {
                 }
             }
 
-            if(val.startsWith("/")) {
-                if(val.trim() === "/help") {
-                    window.tomni.chat.submitChatMessage(val);
-                    _this.commandProcessor.exec(val);
+            if(chatMsg.startsWith("/") || chatMsg.startsWith("\\")) {
+                if(chatMsg.startsWith("\\"))
+                    chatMsg = "/" + chatMsg.substring(1);
+                
+                if(chatMsg.trim() === "/help") {
+                    window.tomni.chat.submitChatMessage(chatMsg);
+                    _this.commandProcessor.exec(chatMsg);
                     return false;
                 }
-                if(_this.commandProcessor.exec(val))
+                
+                if(_this.commandProcessor.exec(chatMsg))
                     return false;
             }
 
-            return window.tomni.chat.submitChatMessage(val);
+            return window.tomni.chat.submitChatMessage(chatMsg);
         }
         else if(e.keyCode === Keycodes.codes.up) {
             return window.tomni.chat.history.up(this);
