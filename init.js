@@ -2,6 +2,8 @@ import {EWDLC} from "./framework/ewdlc.js"
 import {initModules} from "./modules/modules.js"
 
 $(document).ready(function () {
+    if($(".gameBoard").length == 0) return;
+
     let ewdlc = window.ewdlc || new EWDLC();
     window.ewdlc = ewdlc;
     
