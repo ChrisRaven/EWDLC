@@ -1,3 +1,5 @@
+import {TaskStatus} from "../../framework/TaskStatus.js"
+
 function CommandProcessor(tabbedChat) {
     var self = this;
     var boundCallbacks = {};
@@ -34,6 +36,11 @@ function CommandProcessor(tabbedChat) {
 
     function err() {
         window.tomni.chat.addMsg({}, "An error was encountered while running this command. Please wait a moment and try again.");
+    }
+
+    function filterByStatus(tasks) {
+        return tasks.filter(function(task) {return task.status != TaskStatus.frozen && task.status != TaskStatus.stashed})
+                    .map(function(task) {return task.id});
     }
 
     function help(args) {
@@ -215,12 +222,12 @@ function CommandProcessor(tabbedChat) {
         $.when($.getJSON("/1.0/cell/" + cellId + "/tasks"), $.getJSON("/1.0/cell/" + cellId + "/heatmap/scythe"),
                $.getJSON("/1.0/cell/" + cellId + "/tasks/complete/player"), $.getJSON("/1.0/cell/" + cellId + "/heatmap/low-weight?weight=3"))
             .done(function(tasks, scytheData, completeData, data) {
-                tasks = tasks[0];
+                tasks = filterByStatus(tasks[0].tasks);
                 scytheData = scytheData[0];
                 completeData = completeData[0];
                 data = data[0];
 
-                var potentialTasks = tasks.tasks.map(function(elem) {return elem.id;});
+                var potentialTasks = tasks;
                 var frozen = scytheData.frozen || [];
                 var complete = scytheData.complete || [];
 
@@ -283,16 +290,9 @@ function CommandProcessor(tabbedChat) {
         var cellInfo = window.tomni.threeD.getCell(window.tomni.cell).info;
         window.tomni.chat.history.add(args[0]);
 
-        $.get("/1.0/cell/?dataset=" + cellInfo.dataset_id).done(function(data) {
-            var elem = data.find(function(elem) {return elem.id === window.tomni.cell;});
-
-            if(elem) {
-                window.tomni.chat.addMsg({}, cellInfo.name + " is " + elem.count + " cube" + (elem.count !== 1 ? "s" : "") + " big.");
-            } else {
-                $.get("/1.0/cell/" + window.tomni.cell + "/tasks").done(function(data) {
-                    window.tomni.chat.addMsg({}, cellInfo.name + " is " + data.tasks.length + " cube" + (data.tasks.length !== 1 ? "s" : "") + " big.");
-                }).fail(err);
-            }
+        $.get("/1.0/cell/" + window.tomni.cell + "/tasks").done(function(data) {
+            var filteredTasks = data.tasks.filter(function(task) {return task.status != TaskStatus.stashed});
+            window.tomni.chat.addMsg({}, cellInfo.name + " is " + filteredTasks.length + " cube" + (data.tasks.length !== 1 ? "s" : "") + " big.");
         }).fail(err);
     }
 
