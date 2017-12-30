@@ -1,4 +1,8 @@
+import { Setting } from "../../framework/Setting.js"
+
 function ExtraControls() {
+    var _enlargeButtons = new Setting("tc-enlarge-reap-buttons", false, false);
+
     function jumpToCell() {
         if (!window.ewdlc.account.isMystic()) return;
 
@@ -140,10 +144,24 @@ function ExtraControls() {
         });
     }
 
+    function toggleEnlargedButtons(name, value) {
+        $(".reapAuxButton").toggleClass("tcEnlargeButtons", value);
+        $("#editActions").toggleClass("tcEnlargeButtons", value);
+    };
+
     $(window).on("ewdlc-account-ready", function() {
         jumpToCell();
         brushControls();
         borderControls();
+    });
+
+    $(window).on("ewdlc-preferences-loading.extraControls", function() {
+        window.ewdlc.preferences.registerSetting(_enlargeButtons);
+        _enlargeButtons.registerCallback(toggleEnlargedButtons);
+    });
+
+    $(window).on("ewdlc-preferences-loaded.extraControls", function() {
+        window.ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge d. trace/seed, show parent/kids buttons");
     });
 }
 
