@@ -49,7 +49,12 @@ function SettingsUi() {
             elem.change();
         });
 
-        $setting.appendTo(_$container);
+        var $firstButton = _$container.find(".setting > .minimalButton").first();
+
+        if($firstButton.length > 0)
+            $setting.insertBefore($firstButton.parent());
+        else
+            $setting.appendTo(_$container);
     }
 
     _this.makeButton = function(name) {

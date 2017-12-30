@@ -2,6 +2,10 @@ import { Setting } from "../../framework/Setting.js"
 
 function ExtraControls() {
     var _enlargeButtons = new Setting("tc-enlarge-reap-buttons", false, false);
+    var _swapMoveOnAndFlag = new Setting("tc-swap-moveon-flag", false, false);
+
+    var _accountReady = $.Deferred();
+    var _settingsReady = $.Deferred();
 
     function jumpToCell() {
         if (!window.ewdlc.account.isMystic()) return;
@@ -149,19 +153,49 @@ function ExtraControls() {
         $("#editActions").toggleClass("tcEnlargeButtons", value);
     };
 
+    function toggleSwappedButtons(name, value) {
+        var $flagButton = $("#flagCube");
+        var $moveOnButton = $("#actionInspectReviewContinue");
+
+        if(value) {
+            $flagButton.insertAfter($("#deselectSeedGT")).addClass("reapAuxButton enabled tcFlagSwapped").removeClass("reaperButton").empty();
+            $moveOnButton.insertAfter($("#saveGT")).addClass("reaperButton tcFlagSwapped").removeClass("reapAuxButton enabled").text("Move On");
+
+            $("<i>").addClass("fa fa-flag-o").appendTo($flagButton);
+        } else {
+            $flagButton.insertAfter($("#saveGT")).addClass("reaperButton").removeClass("reapAuxButton enabled tcFlagSwapped").empty().text("Flag");
+            $moveOnButton.insertAfter($("#deselectSeedGT")).addClass("reapAuxButton enabled").removeClass("reaperButton tcFlagSwapped").empty();
+        }
+
+        toggleEnlargedButtons("", _enlargeButtons.getValue());
+    }
+
     $(window).on("ewdlc-account-ready", function() {
         jumpToCell();
         brushControls();
         borderControls();
+
+        _accountReady.resolve();
     });
 
     $(window).on("ewdlc-preferences-loading.extraControls", function() {
         window.ewdlc.preferences.registerSetting(_enlargeButtons);
+        window.ewdlc.preferences.registerSetting(_swapMoveOnAndFlag);
         _enlargeButtons.registerCallback(toggleEnlargedButtons);
     });
 
     $(window).on("ewdlc-preferences-loaded.extraControls", function() {
         window.ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge d. trace/seed, show parent/kids buttons");
+
+        _settingsReady.resolve();
+    });
+
+    $.when(_accountReady, _settingsReady).then(function() {
+        if(window.ewdlc.account.isScythe() || !window.ewdlc.account.isScout()) return;
+
+        _swapMoveOnAndFlag.registerCallback(toggleSwappedButtons);
+        window.ewdlc.settingsUi.makeCheckbox(_swapMoveOnAndFlag, "Swap move on/flag buttons");
+        toggleSwappedButtons("", _swapMoveOnAndFlag.getValue());
     });
 }
 
