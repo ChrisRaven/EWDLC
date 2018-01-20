@@ -509,10 +509,12 @@ function TabbedChat() {
 }
 
 function TabbedChatInit() {
-    $.get("https://crazyman4865.com/eyewire/static/tabchat/customstyle.css").done(function(content) {
-        $("<style>").text(content).appendTo($("head"));
-        $(".chatInput").trigger("keyup");
-    });
+    $("<link>").attr("rel", "stylesheet")
+               .attr("type", "text/css")
+               .attr("href", window.ewdlc.getResourceUrl("/css/ewdlc.min.css"))
+               .appendTo("head");
+
+    setTimeout(function() {$(".chatInput").trigger("keyup");}, 5000);
 
     $('<script>', {src: 'https://use.fontawesome.com/7745d29f5b.js'}).appendTo('body');
 

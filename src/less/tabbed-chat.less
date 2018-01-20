@@ -1,0 +1,71 @@
+.chatInput 
+{ 
+	bottom: 50px !important; 
+}
+
+.tabList 
+{ 
+	position: absolute; 
+	bottom: 10px; 
+	left: 8px; 
+	box-sizing: content-box; 
+}
+
+.chatTab 
+{ 
+	background: rgba(0,0,0,.25); 
+	border-radius: 2px; 
+	border: 1px solid #131313; 
+	padding: 5px; 
+	float: left; 
+	color: gray; 
+	font-size: 12px; 
+	margin-right: 5px; 
+	user-select: none; 
+	cursor: pointer;
+	transition: border .4s ease, color .4s ease, opacity .4s ease 1.55s, padding .5s ease, margin-right .5s ease, margin-left 2s ease; 
+    overflow: hidden;
+    
+    &.active {
+        border: 1px solid #fff; 
+        color: #fff; 
+        cursor: default;
+    }
+
+    &.disabled {
+        opacity: 0; 
+        margin-right: 0px; 
+        padding-left: 0px; 
+        padding-right: 5px; 
+        cursor: default; 
+        pointer-events: none; 
+        transition: border .4s ease, color .4s ease, opacity .3s ease, padding .5s ease, margin-right .5s ease, margin-left 2s ease;
+    }
+}
+
+.charLeftContainer {
+	position: absolute;
+    bottom: 50px;
+    left: 8px;
+    width: 305px;
+    box-sizing: content-box;
+    display: inline-block;
+    padding-left: 10px;
+
+    #charLeft {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        font-size: 11px;
+        color: gray;
+    }
+}
+
+#heatMapLegend {
+    max-width: 705px !important;
+    bottom: 50px !important;
+}
+
+.taskid.link.clicked {
+	color: lightgray;
+}

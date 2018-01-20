@@ -2,11 +2,13 @@ var gulp = require("gulp");
 var rollup = require("rollup");
 var UglifyJS = require("uglify-es");
 var fs = require("fs");
+var less = require("less");
+var ncp = require("ncp").ncp;
 
 gulp.task("build", async () => {
+    // JS
     const bundle = await rollup.rollup({
-        input: "init.js",
-        
+        input: "src/init.js"
     });
 
     await bundle.write({
@@ -36,4 +38,46 @@ gulp.task("build", async () => {
         fs.writeFileSync("build/ewdlc.min.js", uglifyResult.code, "utf8");
         fs.writeFileSync("build/ewdlc.min.js.map", uglifyResult.map, "utf8");
     }
+
+    // LESS
+    var options = {
+        filename: "src/less/ewdlc.less",
+        sourceMap: {
+            sourceMapURL: "ewdlc.css.map",
+            outputSourceFiles: true
+        }
+    }
+
+    function lessOutput(e, output) {
+        if(e) {console.log(e); return;}
+    
+        var dir = "build/static/";
+    
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+    
+        var outDir = dir + "css/";
+    
+        if (!fs.existsSync(outDir)){
+            fs.mkdirSync(outDir);
+        }
+    
+        if(options.compress) {
+            fs.writeFileSync(outDir + "ewdlc.min.css", output.css, "utf8");
+            fs.writeFileSync(outDir + "ewdlc.min.css.map", output.map, "utf8");
+        } else {
+            fs.writeFileSync(outDir + "ewdlc.css", output.css, "utf8");
+            fs.writeFileSync(outDir + "ewdlc.css.map", output.map, "utf8");
+        }
+    }
+
+    less.render(fs.readFileSync("src/less/ewdlc.less", "utf8"), options, lessOutput);
+
+    options.compress = true;
+
+    less.render(fs.readFileSync("src/less/ewdlc.less", "utf8"), options, lessOutput);
+    
+    // OTHER RESOUCES
+    ncp("res", "build/static");
 });

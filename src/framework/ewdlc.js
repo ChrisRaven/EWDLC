@@ -5,9 +5,10 @@ import {SettingsUi} from "./SettingsUi.js"
 /**
  * The main entrypoint of the framework
  */
-function EWDLC() {
+function EWDLC(staticDir) {
     var _this = this;
     var _isInit = false;
+    var _staticDir = staticDir;
 
     _this.preferences = new Preferences(_this);
     _this.account = new Account();
@@ -22,6 +23,10 @@ function EWDLC() {
 
         _isInit = true;
     };
+
+    _this.getResourceUrl = function(resource) {
+        return _staticDir + resource;
+    }
 }
 
 export {EWDLC}

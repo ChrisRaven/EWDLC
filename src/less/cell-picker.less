@@ -1,0 +1,81 @@
+@import "includes";
+
+@keyframes scrollingstripes {
+	0% {
+		background-position-x: 0px;
+	}
+	100% {
+		background-position-x: 128px;
+	}
+}
+
+#prvw-container {
+	position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+	
+	width: 600px;
+}
+
+#prvw-top {
+	border: 1px solid #3a3939;
+    border-bottom: 0px;
+    border-top: 0px;
+	
+	background-color: #1e1e1e;
+	
+	font-size: 10pt;
+	font-weight: 400;
+	color: #fff;
+}
+
+#prvw-colors {
+	display: flex;
+	flex-flow: row wrap;
+}
+
+#prvw-color {
+	line-height: 26px;
+	flex-grow: 1;
+	min-width: 170px;
+	padding: 5px 10px 5px 10px;
+}
+
+.prvw-spectrum {
+	padding: 1px;
+	float: right;
+}
+
+#prvw-actions {
+	display: flex;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#prvw-action {
+	flex: 1 0 100px;
+	text-align: center;
+	margin: 5px;
+}
+
+#prvw-collapse {
+	border: 1px solid #3a3939;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+	
+	background-color: #1e1e1e;
+	color: white;
+	
+	padding: 10px;
+	
+    background-image: url("@{resource-url}/img/warning-stripes.png");
+    background-repeat: repeat;
+	
+	animation: scrollingstripes 10s; 
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+	
+	user-select: none;
+	cursor: pointer;
+}

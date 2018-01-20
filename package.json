@@ -2,16 +2,14 @@
   "name": "ewdlc",
   "version": "1.0.0",
   "description": "",
-  "main": "init.js",
-  "dependencies": {
-    "eslint": "^4.7.2",
-    "uglify-js": "^3.1.1"
-  },
+  "main": "src/init.js",
   "devDependencies": {
-    "rollup": "^0.50.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eslint": "4.7.2",
+    "gulp": "3.9.1",
+    "less": "2.7.3",
+    "ncp": "^2.0.0",
+    "rollup": "0.50.0",
+    "uglify-js": "3.1.1"
   },
   "author": "Iliyan Georgiev",
   "license": "MIT"

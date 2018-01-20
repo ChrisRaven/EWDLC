@@ -1,0 +1,70 @@
+@import "includes";
+
+.twoD-borders {
+	position: absolute;
+	border: 32px solid #00f;
+	width: 192px;
+	height: 192px;
+	transform-origin: center center 0;
+	pointer-events: none;
+	opacity: 0.3;
+	transform: matrix(3.35547, 0, 0, 3.35547, 0, 0);
+}
+
+#cellJumpButton {
+	background: url("https://eyewire.org/static/images/ui/Jump.svg") no-repeat 50%;
+    background-size: 65%;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin: 8px;
+    background-color: #717171;
+    border: none;
+    outline: none;
+
+    &:not([disabled]) {
+        background-color: #6f57d2;
+    }
+}
+
+.reapAuxButton.tcEnlargeButtons {
+    width: 64px !important;
+	border-radius: 16px !important;
+	margin: 8px 12px !important;
+
+    &#showParent, &#showChildren, &#deselectGT {
+        background-size: 40px;
+    }
+
+    &#deselectSeedGT {
+        background-size: 64px;
+    }
+}
+
+#editActions.tcEnlargeButtons {
+	background-image: url("@{resource-url}/img/extended_reap_path.svg") !important;
+    padding-left: 40px;
+}
+
+#actionInspectReviewContinue.tcFlagSwapped {
+	visibility: visible !important;
+    background-image: none !important;
+}
+
+#flagCube.tcFlagSwapped {
+	color: white;
+    background-color: #4f74c4;
+
+    &:hover {
+        background-color: #6785c5;
+    }
+
+    &:active {
+        background-color: #717171;
+        box-shadow: inset 0 0 6px 1px rgba(0,0,0,.5);
+    }
+
+    &.tcEnlargeButtons {
+        font-size: 20px;
+    }
+}
