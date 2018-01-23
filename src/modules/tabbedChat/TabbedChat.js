@@ -519,7 +519,18 @@ function TabbedChatInit() {
                .attr("href", window.ewdlc.getResourceUrl("/css/ewdlc.min.css"))
                .appendTo("head");
 
-    setTimeout(function() {$(".chatInput").trigger("keyup");}, 5000);
+    var interval = setInterval(function() {
+        var found = false;
+        for(var i = 0; i < document.styleSheets.length; i++) {
+            if(document.styleSheets[i].href && document.styleSheets[i].href.includes("/css/ewdlc.min.css"))
+                found = true;
+        }
+
+        if(!found) return;
+
+        $(".chatInput").trigger("keyup");
+        clearInterval(interval);
+    }, 500);
 
     $('<script>', {src: 'https://use.fontawesome.com/7745d29f5b.js'}).appendTo('body');
 
