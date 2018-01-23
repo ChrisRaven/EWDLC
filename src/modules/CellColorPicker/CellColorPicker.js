@@ -2,7 +2,7 @@ import { ColorPickerView } from "./ColorPickerView.js"
 import { Setting } from "../../framework/Setting.js"
 
 function CellColorPicker() {
-    var _view = new ColorPickerView($.extend({}, Cell.ScytheVisionColors));
+    var _view = null;
     var _this = this;
     var _$showButton;
 
@@ -21,6 +21,7 @@ function CellColorPicker() {
 
     var _accountReady = $.Deferred();
     var _settingsReady = $.Deferred();
+    var _spectrumReady = $.Deferred();
 
     function start() {
         if(_tasksRequest) _tasksRequest.abort();
@@ -147,19 +148,7 @@ function CellColorPicker() {
     };
 
     $("<link>").attr("rel", "stylesheet").attr("href", "https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css").appendTo($("head"));
-    $.cachedScript("https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js").done(function() {
-        _view.init();
-        _view.setColors($.extend({}, _setting.getValue()));
-        if(_$showButton) {
-            _$showButton.click(start);
-        }
-
-        let $container = _view.getContainer();
-
-        $container.on("prvw-exited.cellColorPicker", stop);
-        $container.on("prvw-colors-changed.cellColorPicker", applyColors);
-        $container.on("prvw-colors-saved.cellColorPicker", save);
-    });
+    $.cachedScript("https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js").done(_spectrumReady.resolve);
 
     _this.getView = function() {
         return _view;
@@ -169,10 +158,21 @@ function CellColorPicker() {
 
     $(window).on("ewdlc-preferences-loaded.cellColorPicker", _settingsReady.resolve);
 
-    $.when(_accountReady, _settingsReady).then(function() {
-        if(window.ewdlc.account.isScout()) {
-            _$showButton = window.ewdlc.settingsUi.makeButton("Show Cell Color Picker");
-        }
+    $.when(_accountReady, _settingsReady, _spectrumReady).then(function() {
+        if(!window.ewdlc.account.isScout()) return;
+
+        _view = new ColorPickerView($.extend({}, Cell.ScytheVisionColors));
+        _view.init();
+        _view.setColors($.extend({}, _setting.getValue()));
+
+        let $container = _view.getContainer();
+
+        $container.on("prvw-exited.cellColorPicker", stop);
+        $container.on("prvw-colors-changed.cellColorPicker", applyColors);
+        $container.on("prvw-colors-saved.cellColorPicker", save);
+
+        _$showButton = window.ewdlc.settingsUi.makeButton("Show Cell Color Picker");
+        _$showButton.click(start);
     });
 
     $(window).on("ewdlc-preferences-loading.cellColorPicker", function() {
