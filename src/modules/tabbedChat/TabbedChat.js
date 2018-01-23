@@ -323,12 +323,14 @@ function TabbedChat() {
 
     // Add the default tab
     activeTab = _this.addTab("All", "", "");
-    _this.addTab("Commands", "", "");
     activeTab.setActive(true);
 
     // Add any tab per role
     function _addRoleTabs() {
         let account = window.ewdlc.account;
+        if(account.isScythe()) {
+            _this.addTab("Commands", "", "");
+        }
         if(account.isScout()) {
             _this.addTab("Scouts", "/gm scouts ", "(scouts)");
         }
