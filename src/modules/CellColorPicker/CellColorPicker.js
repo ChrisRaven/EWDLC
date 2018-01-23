@@ -19,6 +19,9 @@ function CellColorPicker() {
     var _originalColorFunc;
     var _originalUpdateFunc;
 
+    var _accountReady = $.Deferred();
+    var _settingsReady = $.Deferred();
+
     function start() {
         if(_tasksRequest) _tasksRequest.abort();
         if(_heatmapRequest) _heatmapRequest.abort();
@@ -147,7 +150,9 @@ function CellColorPicker() {
     $.cachedScript("https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js").done(function() {
         _view.init();
         _view.setColors($.extend({}, _setting.getValue()));
-        _$showButton.click(start);
+        if(_$showButton) {
+            _$showButton.click(start);
+        }
 
         let $container = _view.getContainer();
 
@@ -160,9 +165,15 @@ function CellColorPicker() {
         return _view;
     }
 
-    $(window).on("ewdlc-preferences-loaded.cellColorPicker", function() {
-        _$showButton = window.ewdlc.settingsUi.makeButton("Show Cell Color Picker");
-    })
+    $(window).on("ewdlc-account-ready", _accountReady.resolve);
+
+    $(window).on("ewdlc-preferences-loaded.cellColorPicker", _settingsReady.resolve);
+
+    $.when(_accountReady, _settingsReady).then(function() {
+        if(window.ewdlc.account.isScout()) {
+            _$showButton = window.ewdlc.settingsUi.makeButton("Show Cell Color Picker");
+        }
+    });
 
     $(window).on("ewdlc-preferences-loading.cellColorPicker", function() {
         window.ewdlc.preferences.registerSetting(_setting);

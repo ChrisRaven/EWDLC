@@ -186,12 +186,14 @@ function ExtraControls() {
     });
 
     $(window).on("ewdlc-preferences-loaded.extraControls", function() {
-        window.ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge d. trace/seed, show parent/kids buttons");
-
         _settingsReady.resolve();
     });
 
     $.when(_accountReady, _settingsReady).then(function() {
+        if(window.ewdlc.account.isScout()) {
+            window.ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge d. trace/seed, show parent/kids buttons");
+        }
+
         if(window.ewdlc.account.isScythe() || !window.ewdlc.account.isScout()) return;
 
         _swapMoveOnAndFlag.registerCallback(toggleSwappedButtons);

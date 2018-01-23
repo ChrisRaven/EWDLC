@@ -75,6 +75,7 @@ gulp.task("build", async () => {
     less.render(fs.readFileSync("src/less/ewdlc.less", "utf8"), options, lessOutput);
 
     options.compress = true;
+    options.sourceMap.sourceMapURL = "ewdlc.min.css.map";
 
     less.render(fs.readFileSync("src/less/ewdlc.less", "utf8"), options, lessOutput);
     
