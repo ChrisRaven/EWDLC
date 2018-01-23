@@ -50,7 +50,6 @@ function TabbedChat() {
     };
 
     this.prefs = new TabbedPrefs(updateSettings);
-    this.commandProcessor = new CommandProcessor(this);
 
     _this.getActiveTab = function() {
         return activeTab;
@@ -349,9 +348,13 @@ function TabbedChat() {
     }
     
     if(window.ewdlc && window.ewdlc.account.isReady()) {
+        _this.commandProcessor = new CommandProcessor(_this);
         _addRoleTabs();
     } else {
-        $(window).on("ewdlc-account-ready", _addRoleTabs);
+        $(window).on("ewdlc-account-ready", function() {
+            _addRoleTabs(); 
+            _this.commandProcessor = new CommandProcessor(_this);
+        });
     }
 
     chatInput.focus(function() {filterMessages(); $("#charLeft").fadeIn(200);}).focusout(function () {$("#charLeft").fadeOut(200);});

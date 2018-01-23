@@ -334,15 +334,17 @@ function CommandProcessor(tabbedChat) {
     }
 
     this.bind("/help", "", "", help);
-    this.bind("/low-wt", "Lists low weight cubes in cell", "/low-wt [cell=this] [limit=15]", lowWt);
-    this.bind("/clear", "Clears the chat", "", clear);
-    this.bind("/support", "See how to support the author of this script", "", function() {window.tomni.chat.addMsg({}, "While this script will forever remain free, you can buy me a coffee at https://ko-fi.com/iliyang \n" +
-                                                                                                                   "Whether you chip in or not, your support means a lot to me :)");});
-    this.bind("/sc-info", "Shows count of the SC you've done, the amount you can do, and lists cube IDs with SC < 2, wt >= 3", "/sc-info [cell=this] [limit=15]", scInfo);
     this.bind("/add-cell", "Adds one or more cells to the overview", "/add-cell Cell ID 1 [Cell ID 2] ...", addCell);
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
-    this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
     this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
+    this.bind("/clear", "Clears the chat", "", clear);
+    if(window.ewdlc.account.isScout()) {
+        this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
+    }
+    if(window.ewdlc.account.isScythe()) {
+        this.bind("/low-wt", "Lists low weight cubes in cell", "/low-wt [cell=this] [limit=15]", lowWt);
+        this.bind("/sc-info", "Shows count of the SC you've done, the amount you can do, and lists cube IDs with SC < 2, wt >= 3", "/sc-info [cell=this] [limit=15]", scInfo);
+    }
 }
 
 export {CommandProcessor}
