@@ -5,20 +5,20 @@ function TabbedPrefs(callback) {
         "tc-show-timestamp": new Setting("tc-show-timestamp", true),
         "tc-show-all-in-tabs": new Setting("tc-show-all-in-tabs", true),
         "tc-show-points-msgs": new Setting("tc-show-points-msgs", true),
-        "tc-show-only-all": new Setting("tc-show-only-all", false),
-        "tc-disable-unread": new Setting("tc-disable-unread", false),
+        "tc-show-channels-in-all": new Setting("tc-show-channels-in-all", true),
+        "tc-enable-unread": new Setting("tc-enable-unread", true),
         "tc-grayout-messages": new Setting("tc-grayout-messages", false),
-        "tc-skip-leaderboard": new Setting("tc-skip-leaderboard", false)
+        "tc-show-leaderboard": new Setting("tc-show-leaderboard", true)
     };
 
     var lang = [
-        {key: "tc-show-timestamp", lang: "Show Timestamp"},
-        {key: "tc-show-all-in-tabs", lang: "Show Normal Messages in Tabs"},
-        {key: "tc-show-only-all", lang: "Show Only All Messages in All"},
-        {key: "tc-show-points-msgs", lang: "Show Points Messages"},
-        {key: "tc-disable-unread", lang: "Disable Unread Messages Counter"},
-        {key: "tc-grayout-messages", lang: "Show grayed out messages instead of hiding"},
-        {key: "tc-skip-leaderboard", lang: "Don't show leaderboard after submitting cubes"},
+        {key: "tc-show-timestamp", lang: "Chat Timestamp"},
+        {key: "tc-show-all-in-tabs", lang: "General Chat visible in all channels"},
+        {key: "tc-show-channels-in-all", lang: "All channels visible in General Chat"},
+        {key: "tc-show-points-msgs", lang: "Points messages"},
+        {key: "tc-enable-unread", lang: "Unread messages counter"},
+        {key: "tc-grayout-messages", lang: "Show all hidden messages as faded instead"},
+        {key: "tc-show-leaderboard", lang: "Leaderboard pop-up after cube submission"},
     ]
 
     var _this = this;

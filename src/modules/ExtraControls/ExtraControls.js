@@ -191,7 +191,7 @@ function ExtraControls() {
 
     $.when(_accountReady, _settingsReady).then(function() {
         if(window.ewdlc.account.isScout()) {
-            window.ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge d. trace/seed, show parent/kids buttons");
+            window.ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge in-cube buttons");
         }
 
         if(window.ewdlc.account.isScythe() || !window.ewdlc.account.isScout()) return;

@@ -129,7 +129,7 @@ function TabbedChat() {
         var scopeIndex = scopes.indexOf(scopeText);
 
         if(activeTab.getName() === "All") {
-            if(hasUsername && scopeText && _this.prefs.get("tc-show-only-all"))
+            if(hasUsername && scopeText && !_this.prefs.get("tc-show-channels-in-all"))
                 return true;
 
             if(!_this.prefs.get("tc-show-points-msgs")) {
@@ -212,7 +212,7 @@ function TabbedChat() {
     }
 
     function updateSettings() {
-        if(_this.prefs.get("tc-disable-unread")) {
+        if(!_this.prefs.get("tc-enable-unread")) {
             for(var i = 0; i < _tabs.length; i++) {
                 _tabs[i].setUnread(0);
             }
@@ -445,7 +445,7 @@ function TabbedChat() {
                 }
 
                 index = _tabs.findIndex(function(elem) { return elem.getScope() == scopeToSearch; });
-                if(!_this.prefs.get("tc-disable-unread")) {
+                if(_this.prefs.get("tc-enable-unread")) {
                     _tabs[index].setUnread(_tabs[index].getUnread()+1);
                 }
             }
