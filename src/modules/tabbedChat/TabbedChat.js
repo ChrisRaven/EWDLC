@@ -506,7 +506,7 @@ function TabbedChat() {
                 }
             }
 
-            if(chatMsg.startsWith("/") || chatMsg.startsWith("\\")) {
+            if(chatMsg.startsWith("/") || (_this.prefs.get("tc-allow-backslash-prefix") && chatMsg.startsWith("\\"))) {
                 if(chatMsg.startsWith("\\"))
                     chatMsg = "/" + chatMsg.substring(1);
                 

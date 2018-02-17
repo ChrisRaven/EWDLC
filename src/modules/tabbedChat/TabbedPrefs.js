@@ -8,7 +8,8 @@ function TabbedPrefs(callback) {
         "tc-show-channels-in-all": new Setting("tc-show-channels-in-all", true),
         "tc-enable-unread": new Setting("tc-enable-unread", true),
         "tc-grayout-messages": new Setting("tc-grayout-messages", false),
-        "tc-show-leaderboard": new Setting("tc-show-leaderboard", true)
+        "tc-show-leaderboard": new Setting("tc-show-leaderboard", true),
+        "tc-allow-backslash-prefix": new Setting("tc-allow-backslash-prefix", true)
     };
 
     var lang = [
@@ -19,6 +20,7 @@ function TabbedPrefs(callback) {
         {key: "tc-enable-unread", lang: "Unread messages counter"},
         {key: "tc-grayout-messages", lang: "Show all hidden messages as faded instead"},
         {key: "tc-show-leaderboard", lang: "Leaderboard pop-up after cube submission"},
+        {key: "tc-allow-backslash-prefix", lang: "Allow backslash as command prefix"}
     ]
 
     var _this = this;
