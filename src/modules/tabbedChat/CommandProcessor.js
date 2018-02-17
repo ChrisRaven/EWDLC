@@ -244,6 +244,7 @@ function CommandProcessor(tabbedChat) {
                 cleanTasks(potentialTasks, frozen);
 
                 var myTasks = completeData.scythe[window.account.account.uid.toString()] || [];
+                myTasks = myTasks.concat(completeData.admin[window.account.account.uid.toString()] || []);
 
                 cleanTasks(potentialTasks, myTasks);
 
