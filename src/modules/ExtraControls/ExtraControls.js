@@ -65,15 +65,13 @@ function ExtraControls() {
 
     function brushControls() {
 
-        $("<div>").attr("title", "Decrease brush size (q)").addClass("fob")
-            .css("background-image", 'url("' + window.ewdlc.getResourceUrl("/img/brush-size-dec.svg") + '")')
+        $("<div>").attr("title", "Decrease brush size (q)").addClass("fob brush dec")
             .click(function(e) {
             e.stopPropagation();
             SFX.play("button");
             window.tomni.prefs.decreaseBrushSize();
         }).insertAfter($("#mst-slider-container"));
-        $("<div>").attr("title", "Increase brush size (e)").addClass("fob")
-            .css("background-image", 'url("' + window.ewdlc.getResourceUrl("/img/brush-size-inc.svg") + '")')
+        $("<div>").attr("title", "Increase brush size (e)").addClass("fob brush inc")
             .click(function(e) {
             e.stopPropagation();
             SFX.play("button");
