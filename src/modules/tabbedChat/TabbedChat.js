@@ -18,6 +18,7 @@ function TabbedChat() {
     _this.addTab = function (name, prefix, scope) {
         var tab = new Tab({name: name, prefix: prefix, scope: scope});
         container.append(tab.getElement());
+        
         tab.getElement().on("click.tabbedChat", function(e) {
             if(activeTab === tab) {
                 return;
@@ -43,9 +44,14 @@ function TabbedChat() {
             tab.close();
             _tabs[0].getElement().click();
             e.stopPropagation();
+
+            checkTabsShouldShow();
         });
 
         _tabs.push(tab);
+
+        checkTabsShouldShow();
+
         return tab;
     };
 
@@ -80,6 +86,34 @@ function TabbedChat() {
         return (text.includes(" earned ") && text.includes(" points")) ||
             text.includes(" trailblazed a cube") || text.includes(" scythed a cube for") ||
             text.includes(" scouted a cube for");
+    }
+
+    function checkTabsShouldShow() {
+        if(openTabsCount() > 1) {
+            showTabs();
+        } else {
+            hideTabs();
+        }
+    }
+
+    function openTabsCount() {
+        return _tabs.filter(function(tab) {return !tab.isClosed();}).length;
+    }
+
+    function showTabs() {
+        let $chatInput = $('.chatInput');
+
+        $chatInput.animate({bottom: '50px'}, {complete: function() {container.fadeIn();}});
+        $('.chatMsgContainer').animate({bottom: (50 + $chatInput.outerHeight(true)) + 'px'});
+    }
+
+    function hideTabs() {
+        container.fadeOut(function() {
+            let $chatInput = $('.chatInput');
+
+            $chatInput.animate({bottom: '10px'});
+            $('.chatMsgContainer').animate({bottom: (10 + $chatInput.outerHeight(true)) + 'px'});
+        });
     }
 
     function isCrewMsg(text) {
@@ -345,6 +379,8 @@ function TabbedChat() {
         if(account.isAdmin()) {
             _this.addTab("Admins", "/gm admins ", "(admins)");
         }
+
+        checkTabsShouldShow();
     }
     
     if(window.ewdlc && window.ewdlc.account.isReady()) {
@@ -424,6 +460,8 @@ function TabbedChat() {
 
         index = _tabs.findIndex(function(elem) { return elem.getScope() == scopeToSearch; });
         _tabs[index].open();
+
+        checkTabsShouldShow();
 
         chatInput.removeClass("pulsing");
         

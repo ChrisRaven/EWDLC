@@ -5,6 +5,7 @@ function Tab(options) {
     var _prefix = options.prefix;
     var _scope = options.scope;
     var _unreadMessages = 0;
+    var _isClosed = false;
 
     var _this = this;
     var _$textElem = $("<span>").text(_name);
@@ -35,6 +36,10 @@ function Tab(options) {
     _this.isPMTab = function() {
         return _prefix.startsWith("/pm");
     };
+
+    _this.isClosed = function() {
+        return _isClosed;
+    }
 
     _this.setName = function(nameToSet) {
         _name = nameToSet;
@@ -68,11 +73,13 @@ function Tab(options) {
     _this.close = function() {
         _$tabElem.removeClass("active").addClass("disabled");
         _$tabElem.css("margin-left", -_$tabElem.outerWidth() + "px");
+        _isClosed = true;
     };
 
     _this.open = function() {
         _$tabElem.removeClass("disabled");
         _$tabElem.css("margin-left", "0px");
+        _isClosed = false;
     };
 
     if(_prefix.startsWith("/pm")) {
