@@ -268,7 +268,7 @@ function TabbedChat() {
             let x = parseInt(groups[1], 10);
             let y = parseInt(groups[3], 10);
             let z = parseInt(groups[5], 10);
-            window.tomni.ui.recenterView(new THREE.Vector3(-x, -y, -z));
+            tomni.ui.recenterView(new THREE.Vector3(-x, -y, -z));
         }
     }
 
@@ -360,7 +360,7 @@ function TabbedChat() {
 
     // Add any tab per role
     function _addRoleTabs() {
-        let account = window.ewdlc.account;
+        let account = ewdlc.account;
         if(account.isScythe()) {
             _this.addTab("Commands", "", "");
         }
@@ -383,11 +383,11 @@ function TabbedChat() {
         checkTabsShouldShow();
     }
     
-    if(window.ewdlc && window.ewdlc.account.isReady()) {
+    if(ewdlc && ewdlc.account.isReady()) {
         _this.commandProcessor = new CommandProcessor(_this);
         _addRoleTabs();
     } else {
-        $(window).on("ewdlc-account-ready", function() {
+        $(document).on("ewdlc-account-ready", function() {
             _addRoleTabs(); 
             _this.commandProcessor = new CommandProcessor(_this);
         });
@@ -420,7 +420,7 @@ function TabbedChat() {
             }
 
             if(msg.hasUsername) {
-                if(msg.username !== window.account.account.username) {
+                if(msg.username !== account.account.username) {
                 }
 
                 var sound = "chat_public";
@@ -441,7 +441,7 @@ function TabbedChat() {
                 }
 
                 if(chatInput.is(":focus")) {
-                    window.SFX.play(sound);
+                    SFX.play(sound);
                 }
 
                 index = _tabs.findIndex(function(elem) { return elem.getScope() == scopeToSearch; });
@@ -484,7 +484,7 @@ function TabbedChat() {
             }
 
             $(this).val("");
-            window.tomni.chat.history.locator = -1;
+            tomni.chat.history.locator = -1;
 
             var index = _tabs.findIndex(function(elem) {return elem.getName() !== "All" && elem.getName() !== "Commands" && chatMsg.startsWith(elem.getPrefix());});
 
@@ -494,7 +494,7 @@ function TabbedChat() {
                     $(this).val(_tabs[index].getPrefix());
 
                     if(prefixLess.trim() === "/help") {
-                        window.tomni.chat.submitChatMessage(prefixLess);
+                        tomni.chat.submitChatMessage(prefixLess);
                         _this.commandProcessor.exec(prefixLess);
                         return false;
                     }
@@ -502,7 +502,7 @@ function TabbedChat() {
                     if(_this.commandProcessor.exec(prefixLess))
                         return false;
                     else
-                        return window.tomni.chat.submitChatMessage(prefixLess);
+                        return tomni.chat.submitChatMessage(prefixLess);
                 }
             }
 
@@ -511,7 +511,7 @@ function TabbedChat() {
                     chatMsg = "/" + chatMsg.substring(1);
                 
                 if(chatMsg.trim() === "/help") {
-                    window.tomni.chat.submitChatMessage(chatMsg);
+                    tomni.chat.submitChatMessage(chatMsg);
                     _this.commandProcessor.exec(chatMsg);
                     return false;
                 }
@@ -520,13 +520,13 @@ function TabbedChat() {
                     return false;
             }
 
-            return window.tomni.chat.submitChatMessage(chatMsg);
+            return tomni.chat.submitChatMessage(chatMsg);
         }
         else if(e.keyCode === Keycodes.codes.up) {
-            return window.tomni.chat.history.up(this);
+            return tomni.chat.history.up(this);
         }
         else if(e.keyCode === Keycodes.codes.down) {
-            return window.tomni.chat.history.down(this);
+            return tomni.chat.history.down(this);
         }
 
         return true;
@@ -540,7 +540,7 @@ function TabbedChat() {
     var jumpArg = _getParameterByName("tcJumpTaskId");
     if(jumpArg) {
         $(".threeDPanel").on("cell-meshes-loaded.tabbedChat", function() {
-            window.tomni.jumpToTaskID(parseInt(jumpArg, 10));
+            tomni.jumpToTaskID(parseInt(jumpArg, 10));
             $(this).off("cell-meshes-loaded.tabbedChat");
         });
         history.replaceState({}, "Cube Jump", window.location.origin);
@@ -554,7 +554,7 @@ function TabbedChat() {
 function TabbedChatInit() {
     $("<link>").attr("rel", "stylesheet")
                .attr("type", "text/css")
-               .attr("href", window.ewdlc.getResourceUrl("/css/ewdlc.min.css"))
+               .attr("href", ewdlc.getResourceUrl("/css/ewdlc.min.css"))
                .appendTo("head");
 
     var interval = setInterval(function() {
@@ -572,7 +572,7 @@ function TabbedChatInit() {
 
     $('<script>', {src: 'https://use.fontawesome.com/7745d29f5b.js'}).appendTo('body');
 
-    window.ewdlc.modules.tabbedChat = window.ewdlc.modules.tabbedChat || new TabbedChat();
+    ewdlc.modules.tabbedChat = ewdlc.modules.tabbedChat || new TabbedChat();
 }
 
 export {TabbedChatInit}

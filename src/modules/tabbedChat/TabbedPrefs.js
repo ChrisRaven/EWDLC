@@ -33,16 +33,16 @@ function TabbedPrefs(callback) {
         return settings[setting].getValue();
     };
 
-    $(window).on("ewdlc-preferences-loading.tabbedChat", function() {
+    $(document).on("ewdlc-preferences-loading.tabbedChat", function() {
         for(var setting in settings) {
-            window.ewdlc.preferences.registerSetting(settings[setting]);
+            ewdlc.preferences.registerSetting(settings[setting]);
             settings[setting].registerCallback(callback);
         }
     });
 
-    $(window).on("ewdlc-preferences-loaded.tabbedChat", function() {
+    $(document).on("ewdlc-preferences-loaded.tabbedChat", function() {
         for(let i in lang) {
-            window.ewdlc.settingsUi.makeCheckbox(settings[lang[i].key], lang[i].lang);
+            ewdlc.settingsUi.makeCheckbox(settings[lang[i].key], lang[i].lang);
         }
     })
 }

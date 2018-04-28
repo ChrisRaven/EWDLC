@@ -54,7 +54,7 @@ function ProfileWindowChanges() {
 }
 
 function ProfileWindowChangesInit() {
-    window.ewdlc.modules.profileWindowChanges = window.ewdlc.modules.profileWindowChanges || new ProfileWindowChanges();
+    ewdlc.modules.profileWindowChanges = ewdlc.modules.profileWindowChanges || new ProfileWindowChanges();
     $("body").append('<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>');
 }
 

@@ -5,7 +5,7 @@ function SlHacks() {
         });
     }
 
-    var intervalId = window.setInterval(function () {
+    var intervalId = setInterval(function () {
         // Stop SL bug with R toggling review mode
         if (!document.getElementById("slPanel")) return;
 
@@ -13,7 +13,7 @@ function SlHacks() {
             e.stopPropagation();
         });
         console.log("Fixed Scouts' Log Review button bug.");
-        window.clearInterval(intervalId);
+        clearInterval(intervalId);
 
         // Set Need Scythe/Admin button colors to match cell colors
         setColor(".sl-need-admin", Cell.ScytheVisionColors.reap);
@@ -23,7 +23,7 @@ function SlHacks() {
 }
 
 function SlHacksInit() {
-    window.ewdlc.modules.slHacks = window.ewdlc.modules.slHacks || new SlHacks();
+    ewdlc.modules.slHacks = ewdlc.modules.slHacks || new SlHacks();
 }
 
 export { SlHacks }

@@ -64,11 +64,11 @@ function Preferences(ewdlc) {
     _this.init = function() {
         if(_isInit) return;
 
-        $(window).trigger("ewdlc-preferences-loading");
+        $(document).trigger("ewdlc-preferences-loading");
         
         _loadSettings();
         
-        $(window).trigger("ewdlc-preferences-loaded");
+        $(document).trigger("ewdlc-preferences-loaded");
 
         _isInit = true;
     };

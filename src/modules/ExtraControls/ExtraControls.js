@@ -8,7 +8,7 @@ function ExtraControls() {
     var _settingsReady = $.Deferred();
 
     function jumpToCell() {
-        if (!window.ewdlc.account.isMystic()) return;
+        if (!ewdlc.account.isMystic()) return;
 
         let $jumpContainer = $("#jumpContainer").clone().detach();
         let $input = $jumpContainer.find("input");
@@ -40,7 +40,7 @@ function ExtraControls() {
 				return false;
 			}
 
-			window.tomni.setCell({id: cid}).fail(function () {
+			tomni.setCell({id: cid}).fail(function () {
 				$field.addClass('error');
 			});
 
@@ -69,13 +69,13 @@ function ExtraControls() {
             .click(function(e) {
             e.stopPropagation();
             SFX.play("button");
-            window.tomni.prefs.decreaseBrushSize();
+            tomni.prefs.decreaseBrushSize();
         }).insertAfter($("#mst-slider-container"));
         $("<div>").attr("title", "Increase brush size (e)").addClass("fob brush inc")
             .click(function(e) {
             e.stopPropagation();
             SFX.play("button");
-            window.tomni.prefs.increaseBrushSize();
+            tomni.prefs.increaseBrushSize();
         }).insertAfter($("#mst-slider-container"));
     }
 
@@ -118,9 +118,9 @@ function ExtraControls() {
         }).appendTo($(".twoD-controls"));
 
         var firstStartup = true;
-        var originalPlay = window.tomni.play;
-        window.tomni.play = function(data) {
-            if(window.tomni.getCurrentCell().info.dataset_id !== 1) {
+        var originalPlay = tomni.play;
+        tomni.play = function(data) {
+            if(tomni.getCurrentCell().info.dataset_id !== 1) {
                 $button.hide();
             } else {
                 $button.show();
@@ -137,7 +137,7 @@ function ExtraControls() {
         };
 
         $(document).on("keydown.spawnBorders", function(e) {
-            if(!window.tomni.gameMode || window.tomni.getCurrentCell().info.dataset_id !== 1) return;
+            if(!tomni.gameMode || tomni.getCurrentCell().info.dataset_id !== 1) return;
 
             if(e.keyCode === Keycodes.codes.b) {
                 e.preventDefault();
@@ -169,7 +169,7 @@ function ExtraControls() {
         toggleEnlargedButtons("", _enlargeButtons.getValue());
     }
 
-    $(window).on("ewdlc-account-ready", function() {
+    $(document).on("ewdlc-account-ready", function() {
         jumpToCell();
         brushControls();
         borderControls();
@@ -177,31 +177,31 @@ function ExtraControls() {
         _accountReady.resolve();
     });
 
-    $(window).on("ewdlc-preferences-loading.extraControls", function() {
-        window.ewdlc.preferences.registerSetting(_enlargeButtons);
-        window.ewdlc.preferences.registerSetting(_swapMoveOnAndFlag);
+    $(document).on("ewdlc-preferences-loading.extraControls", function() {
+        ewdlc.preferences.registerSetting(_enlargeButtons);
+        ewdlc.preferences.registerSetting(_swapMoveOnAndFlag);
         _enlargeButtons.registerCallback(toggleEnlargedButtons);
     });
 
-    $(window).on("ewdlc-preferences-loaded.extraControls", function() {
+    $(document).on("ewdlc-preferences-loaded.extraControls", function() {
         _settingsReady.resolve();
     });
 
     $.when(_accountReady, _settingsReady).then(function() {
-        if(window.ewdlc.account.isScout()) {
-            window.ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge in-cube buttons");
+        if(ewdlc.account.isScout()) {
+            ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge in-cube buttons");
         }
 
-        if(window.ewdlc.account.isScythe() || !window.ewdlc.account.isScout()) return;
+        if(ewdlc.account.isScythe() || !ewdlc.account.isScout()) return;
 
         _swapMoveOnAndFlag.registerCallback(toggleSwappedButtons);
-        window.ewdlc.settingsUi.makeCheckbox(_swapMoveOnAndFlag, "Swap move on/flag buttons");
+        ewdlc.settingsUi.makeCheckbox(_swapMoveOnAndFlag, "Swap move on/flag buttons");
         toggleSwappedButtons("", _swapMoveOnAndFlag.getValue());
     });
 }
 
 function ExtraControlsInit() {
-    window.ewdlc.modules.extraControls = window.ewdlc.modules.extraControls || new ExtraControls();
+    ewdlc.modules.extraControls = ewdlc.modules.extraControls || new ExtraControls();
 }
 
 export {ExtraControls}

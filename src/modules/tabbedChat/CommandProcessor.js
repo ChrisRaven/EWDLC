@@ -35,7 +35,7 @@ function CommandProcessor(tabbedChat) {
     };
 
     function err() {
-        window.tomni.chat.addMsg({}, "An error was encountered while running this command. Please wait a moment and try again.");
+        tomni.chat.addMsg({}, "An error was encountered while running this command. Please wait a moment and try again.");
     }
 
     function filterByStatus(tasks) {
@@ -43,8 +43,8 @@ function CommandProcessor(tabbedChat) {
     }
 
     function help(args) {
-        window.tomni.chat.addMsg({}, "------------------");
-        window.tomni.chat.addMsg({}, "Tabbed Chat commands:");
+        tomni.chat.addMsg({}, "------------------");
+        tomni.chat.addMsg({}, "Tabbed Chat commands:");
 
         for(var key in boundCallbacks) {
             if(key === "/help") continue;
@@ -56,19 +56,19 @@ function CommandProcessor(tabbedChat) {
             if(bound.description) msg += bound.description;
             if(bound.description && bound.usage) msg += ", Usage: ";
             if(bound.usage) msg += bound.usage;
-            window.tomni.chat.addMsg({}, msg);
+            tomni.chat.addMsg({}, msg);
         }
 
-        window.tomni.chat.addMsg({}, "------------------");
+        tomni.chat.addMsg({}, "------------------");
     }
 
     function getCellLimit(args) {
-        var cellId = window.tomni.cell;
+        var cellId = tomni.cell;
         var limit = 15;
 
         if(args.length >= 2) {
             if(args[1].toLowerCase() === "this") {
-                cellId = window.tomni.cell;
+                cellId = tomni.cell;
             } else {
                 cellId = parseInt(args[1]);
                 if(isNaN(cellId) || cellId <= 0) {
@@ -124,11 +124,11 @@ function CommandProcessor(tabbedChat) {
         };
 
         var help = function() {
-            window.tomni.chat.addMsg({}, "Usage: /low-wt [cell=this] [limit=15]");
+            tomni.chat.addMsg({}, "Usage: /low-wt [cell=this] [limit=15]");
         };
 
-        if(!window.ewdlc.account.isScout()) {
-            window.tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
+        if(!ewdlc.account.isScout()) {
+            tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
             return;
         }
 
@@ -145,7 +145,7 @@ function CommandProcessor(tabbedChat) {
             help(); return;
         }
 
-        window.tomni.chat.history.add(args.join(' '));
+        tomni.chat.history.add(args.join(' '));
 
         $.get("/1.0/cell/" + cellId + "/heatmap/scythe").done(function(scytheData) {
             var frozen = scytheData.frozen;
@@ -167,9 +167,9 @@ function CommandProcessor(tabbedChat) {
                 }
 
                 if(count === 0) {
-                    window.tomni.chat.addMsg({}, "There are no low weight cubes in cell " + cellId);
+                    tomni.chat.addMsg({}, "There are no low weight cubes in cell " + cellId);
                 } else {
-                    window.tomni.chat.addMsg({}, msg);
+                    tomni.chat.addMsg({}, msg);
                 }
             }).fail(err);
         }).fail(err);
@@ -177,12 +177,12 @@ function CommandProcessor(tabbedChat) {
 
     function clear(args) {
         $(".chatMsgContainer").empty();
-        window.tomni.chat.addMsg({}, "The chat has been cleared.");
+        tomni.chat.addMsg({}, "The chat has been cleared.");
     }
 
     function scInfo(args) {
         var help = function() {
-            window.tomni.chat.addMsg({}, "Usage: /sc-info [cell=this] [limit=15]");
+            tomni.chat.addMsg({}, "Usage: /sc-info [cell=this] [limit=15]");
         };
 
         var cleanTasks = function(potentialTasks, taskArray) {
@@ -197,8 +197,8 @@ function CommandProcessor(tabbedChat) {
             return potentialTasks;
         };
 
-        if(!window.ewdlc.account.isScythe()) {
-            window.tomni.chat.addMsg({}, "You must be a scythe or higher to use this command.");
+        if(!ewdlc.account.isScythe()) {
+            tomni.chat.addMsg({}, "You must be a scythe or higher to use this command.");
             return;
         }
 
@@ -215,8 +215,8 @@ function CommandProcessor(tabbedChat) {
             help(); return;
         }
 
-        window.tomni.chat.history.add(args.join(' '));
-        window.tomni.chat.addMsg({}, "Please wait while Grim's minions collect some data...");
+        tomni.chat.history.add(args.join(' '));
+        tomni.chat.addMsg({}, "Please wait while Grim's minions collect some data...");
 
         $.when($.getJSON("/1.0/cell/" + cellId + "/tasks"), $.getJSON("/1.0/cell/" + cellId + "/heatmap/scythe"),
                $.getJSON("/1.0/cell/" + cellId + "/tasks/complete/player"))
@@ -243,8 +243,8 @@ function CommandProcessor(tabbedChat) {
                 cleanTasks(potentialTasks, tasks.filter(t => t.weight < 3).map(t => t.id));
                 cleanTasks(potentialTasks, frozen);
 
-                var myTasks = completeData.scythe[window.account.account.uid.toString()] || [];
-                myTasks = myTasks.concat(completeData.admin[window.account.account.uid.toString()] || []);
+                var myTasks = completeData.scythe[account.account.uid.toString()] || [];
+                myTasks = myTasks.concat(completeData.admin[account.account.uid.toString()] || []);
 
                 cleanTasks(potentialTasks, myTasks);
 
@@ -266,7 +266,7 @@ function CommandProcessor(tabbedChat) {
                     }
                 }
 
-                window.tomni.chat.addMsg({}, msg);
+                tomni.chat.addMsg({}, msg);
             })
             .fail(err);
     }
@@ -275,56 +275,56 @@ function CommandProcessor(tabbedChat) {
         for(var i = 1; i < args.length; i++) {
             var id = parseInt(args[i], 10);
             if(!isNaN(id)) {
-                window.tomni.threeD.addCell( {cellid: id, center: true});
+                tomni.threeD.addCell( {cellid: id, center: true});
             }
         }
     }
 
     function cellSize(args) {
-        var cellInfo = window.tomni.threeD.getCell(window.tomni.cell).info;
-        window.tomni.chat.history.add(args[0]);
+        var cellInfo = tomni.threeD.getCell(tomni.cell).info;
+        tomni.chat.history.add(args[0]);
 
-        $.get("/1.0/cell/" + window.tomni.cell + "/tasks").done(function(data) {
+        $.get("/1.0/cell/" + tomni.cell + "/tasks").done(function(data) {
             var filteredTasks = data.tasks.filter(function(task) {return task.status != TaskStatus.stashed});
-            window.tomni.chat.addMsg({}, cellInfo.name + " is " + filteredTasks.length + " cube" + (data.tasks.length !== 1 ? "s" : "") + " big.");
+            tomni.chat.addMsg({}, cellInfo.name + " is " + filteredTasks.length + " cube" + (data.tasks.length !== 1 ? "s" : "") + " big.");
         }).fail(err);
     }
 
     function cubeDupes(args) {
-        if(!window.ewdlc.account.isScout()) {
-            window.tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
+        if(!ewdlc.account.isScout()) {
+            tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
             return;
         }
 
-        window.tomni.chat.history.add(args[0]);
+        tomni.chat.history.add(args[0]);
 
-        if(!window.tomni.gameMode || !window.tomni.task.inspect) {
-            window.tomni.chat.addMsg({}, "You must be inspecting a cube to use this command.");
+        if(!tomni.gameMode || !tomni.task.inspect) {
+            tomni.chat.addMsg({}, "You must be inspecting a cube to use this command.");
             return;
         }
 
-        if(window.tomni.task.duplicates.length === 0) {
-            window.tomni.chat.addMsg({}, "There are no duplicates in this cube.");
+        if(tomni.task.duplicates.length === 0) {
+            tomni.chat.addMsg({}, "There are no duplicates in this cube.");
             return;
         }
 
         var msg = "Duplicates in the current cube:\n ";
-        msg += window.tomni.task.duplicates.map(function(e) { return "#" + e.task_id;}).join(' ');
-        window.tomni.chat.addMsg({}, msg);
+        msg += tomni.task.duplicates.map(function(e) { return "#" + e.task_id;}).join(' ');
+        tomni.chat.addMsg({}, msg);
     }
 
     function huntGuess(args) {
-        if(!window.tomni.getCurrentCell().info.is_hunt) {
-            window.tomni.chat.addMsg({}, "You must be in a hunt cell to use this command.");
+        if(!tomni.getCurrentCell().info.is_hunt) {
+            tomni.chat.addMsg({}, "You must be in a hunt cell to use this command.");
             return;
         }
 
-        var center = window.tomni.center.rotation.clone().multiplyScalar(100).round().multiplyScalar(1/100).floor();
+        var center = tomni.center.rotation.clone().multiplyScalar(100).round().multiplyScalar(1/100).floor();
         center = [center.x, center.y, center.z];
         center = center.join(" ");
 
         var msg = "/pm thehunt " + center;
-        window.tomni.chat.submitChatMessage(msg);
+        tomni.chat.submitChatMessage(msg);
     }
 
     this.bind("/help", "", "", help);
@@ -332,10 +332,10 @@ function CommandProcessor(tabbedChat) {
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
     this.bind("/clear", "Clears the chat", "", clear);
-    if(window.ewdlc.account.isScout()) {
+    if(ewdlc.account.isScout()) {
         this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
     }
-    if(window.ewdlc.account.isScythe()) {
+    if(ewdlc.account.isScythe()) {
         this.bind("/low-wt", "Lists low weight cubes in cell", "/low-wt [cell=this] [limit=15]", lowWt);
         this.bind("/sc-info", "Shows count of the SC you've done, the amount you can do, and lists cube IDs with SC < 2, wt >= 3", "/sc-info [cell=this] [limit=15]", scInfo);
     }

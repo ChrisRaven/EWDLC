@@ -30,7 +30,7 @@ function CellColorPicker() {
         _tasks = [];
         _groups = {};
 
-        _cell = window.tomni.getCurrentCell();
+        _cell = tomni.getCurrentCell();
         _originalColorFunc = _cell.resetTaskColors;
         _originalUpdateFunc = _cell.updateCompleteColoring;
         _cell.resetTaskColors = function() {};
@@ -65,8 +65,8 @@ function CellColorPicker() {
 
         _requestsDone = false;
 
-        _tasksRequest = $.getJSON("/1.0/cell/" + window.tomni.cell + "/tasks").done(processTasks);
-        _heatmapRequest = $.getJSON("/1.0/cell/" + window.tomni.cell + "/heatmap/scythe").done(processHeatmap);
+        _tasksRequest = $.getJSON("/1.0/cell/" + tomni.cell + "/tasks").done(processTasks);
+        _heatmapRequest = $.getJSON("/1.0/cell/" + tomni.cell + "/heatmap/scythe").done(processHeatmap);
 
         $.when(_tasksRequest, _heatmapRequest).done(function() {
             _requestsDone = true;
@@ -154,12 +154,12 @@ function CellColorPicker() {
         return _view;
     }
 
-    $(window).on("ewdlc-account-ready", _accountReady.resolve);
+    $(document).on("ewdlc-account-ready", _accountReady.resolve);
 
-    $(window).on("ewdlc-preferences-loaded.cellColorPicker", _settingsReady.resolve);
+    $(document).on("ewdlc-preferences-loaded.cellColorPicker", _settingsReady.resolve);
 
     $.when(_accountReady, _settingsReady, _spectrumReady).then(function() {
-        if(!window.ewdlc.account.isScout()) return;
+        if(!ewdlc.account.isScout()) return;
 
         _view = new ColorPickerView($.extend({}, Cell.ScytheVisionColors));
         _view.init();
@@ -171,21 +171,21 @@ function CellColorPicker() {
         $container.on("prvw-colors-changed.cellColorPicker", applyColors);
         $container.on("prvw-colors-saved.cellColorPicker", save);
 
-        _$showButton = window.ewdlc.settingsUi.makeButton("Show Cell Color Picker");
+        _$showButton = ewdlc.settingsUi.makeButton("Show Cell Color Picker");
         _$showButton.click(start);
     });
 
-    $(window).on("ewdlc-preferences-loading.cellColorPicker", function() {
-        window.ewdlc.preferences.registerSetting(_setting);
+    $(document).on("ewdlc-preferences-loading.cellColorPicker", function() {
+        ewdlc.preferences.registerSetting(_setting);
     });
 
-    $(window).on("ewdlc-preferences-loaded.cellColorPicker", function() {
+    $(document).on("ewdlc-preferences-loaded.cellColorPicker", function() {
         Cell.ScytheVisionColors = _setting.getValue();
     });
 }
 
 function CellColorPickerInit() {
-    window.ewdlc.modules.cellColorPicker = window.ewdlc.modules.cellColorPicker || new CellColorPicker();
+    ewdlc.modules.cellColorPicker = ewdlc.modules.cellColorPicker || new CellColorPicker();
 }
 
 export {CellColorPickerInit}

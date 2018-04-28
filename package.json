@@ -6,11 +6,15 @@
   "devDependencies": {
     "eslint": "4.7.2",
     "gulp": "3.9.1",
-    "less": "2.7.3",
+    "less": "^2.7.3",
     "ncp": "^2.0.0",
-    "rollup": "0.50.0",
+    "rollup": "^0.50.0",
     "uglify-js": "3.1.1"
   },
   "author": "Iliyan Georgiev",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "uglify-es": "^3.3.9"
+  }
 }

@@ -4,8 +4,7 @@ import {initModules} from "./modules/modules.js"
 $(document).ready(function () {
     if($(".gameBoard").length == 0) return;
 
-    let ewdlc = window.ewdlc || new EWDLC("https://crazyman4865.com/eyewire/static");
-    window.ewdlc = ewdlc;
+    let ewdlc = ewdlc || new EWDLC("https://crazyman4865.com/eyewire/static");
     
     initModules();
     ewdlc.init();

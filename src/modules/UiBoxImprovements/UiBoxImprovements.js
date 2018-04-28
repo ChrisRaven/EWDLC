@@ -20,8 +20,8 @@ function UiBoxImprovements() {
     }
 
     function clampAndSetCoords(top, left) {
-        top = clamp(top, 0, $(window).height() - $floatingControls.outerHeight());
-        left = clamp(left, 0, $(window).width() - $floatingControls.outerWidth());
+        top = clamp(top, 0, $(document).height() - $floatingControls.outerHeight());
+        left = clamp(left, 0, $(document).width() - $floatingControls.outerWidth());
 
         setCoords(top, left);
 
@@ -57,7 +57,7 @@ function UiBoxImprovements() {
 
             $span.click(function(e) {
                 $(this).addClass("clicked");
-                window.tomni.jumpToTaskID($(this).data("target"));
+                tomni.jumpToTaskID($(this).data("target"));
                 e.stopPropagation();
             });
 
@@ -99,13 +99,13 @@ function UiBoxImprovements() {
         });
     }
 
-    $(window).on("ewdlc-preferences-loading", function() {
-        window.ewdlc.preferences.registerSetting(_floatinsp_top);
-        window.ewdlc.preferences.registerSetting(_floatinsp_left);
-        window.ewdlc.preferences.registerSetting(_floatinsp_cube_tab);
+    $(document).on("ewdlc-preferences-loading", function() {
+        ewdlc.preferences.registerSetting(_floatinsp_top);
+        ewdlc.preferences.registerSetting(_floatinsp_left);
+        ewdlc.preferences.registerSetting(_floatinsp_cube_tab);
     });
 
-    $(window).on("ewdlc-preferences-loaded", function() {
+    $(document).on("ewdlc-preferences-loaded", function() {
         if(_floatinsp_top.getValue() != null && _floatinsp_left.getValue() != null) {
             clampAndSetCoords(_floatinsp_top.getValue(),_floatinsp_left.getValue());
         }
@@ -127,7 +127,7 @@ function UiBoxImprovements() {
     
         observer.observe(document.getElementById("cubeInspectorFloatingControls"), {attributes: true});
     
-        $(window).resize(function() {
+        $(document).resize(function() {
             updateCoords();
         });
     });
@@ -175,7 +175,7 @@ function UiBoxImprovements() {
 }
 
 function UiBoxImprovementsInit() {
-    window.ewdlc.modules.uiBoxImprovements = window.ewdlc.modules.uiBoxImprovements || new UiBoxImprovements();
+    ewdlc.modules.uiBoxImprovements = ewdlc.modules.uiBoxImprovements || new UiBoxImprovements();
 }
 
 export {UiBoxImprovements}

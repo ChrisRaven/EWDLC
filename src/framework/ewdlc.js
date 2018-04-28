@@ -19,7 +19,7 @@ function EWDLC(staticDir) {
         if(_isInit) return;
 
         _this.preferences.init();
-        _this.account.refreshInfo().then(() => $(window).trigger("ewdlc-account-ready"));
+        _this.account.refreshInfo().then(() => $(document).trigger("ewdlc-account-ready"));
 
         _isInit = true;
     };

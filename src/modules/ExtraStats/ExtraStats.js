@@ -30,10 +30,10 @@ function ExtraStats() {
         }, 350);
     }
 
-    window.Profile.updateAlwaysVisibleStats = function(t) {
+    Profile.updateAlwaysVisibleStats = function(t) {
         t = t || {};
         var i = function(e) {
-            return window.Utils.numberToCondensedSI({
+            return Utils.numberToCondensedSI({
                 number: e,
                 fit: 6,
                 maxchars: 6,
@@ -60,7 +60,7 @@ function ExtraStats() {
         $("#profileButton a").text(t.username);
     };
 
-    window.tomni.taskManager.ui.modeSet = function() {
+    tomni.taskManager.ui.modeSet = function() {
         $.getJSON("/1.0/player/" + encodeURIComponent(account.account.username) + "/stats", function(e) {
             account.account.stats = e;
             Profile.updateAlwaysVisibleStats({
@@ -78,22 +78,22 @@ function ExtraStats() {
     var secondSet;
     var isBigEnough = true;
 
-    window.account.refresh = function(t) {
+    account.refresh = function(t) {
         return $.getJSON("/1.0/player/describe/").done(function(i) {
             if(i && i.id) {
-                window.account.account.username = i.username;
-                window.account.account.uid = i.id;
-                window.account.account.rank = i["class"];
-                window.account.account.joined = new Date(i.joined);
-                window.account.account.country = i.country;
-                window.account.account.country_name = i.country_name;
-                window.account.account.trained = i.trained;
-                window.account.account.newbie = i.newbie;
-                window.account.account.first_timer = i.first_timer;
-                window.account.account.language = i.language;
-                window.account.account.level = i.level || 0;
-                window.account.assignRoles(i);
-                $.getJSON("/1.0/player/" + window.account.account.username + "/stats", function(t) {
+                account.account.username = i.username;
+                account.account.uid = i.id;
+                account.account.rank = i["class"];
+                account.account.joined = new Date(i.joined);
+                account.account.country = i.country;
+                account.account.country_name = i.country_name;
+                account.account.trained = i.trained;
+                account.account.newbie = i.newbie;
+                account.account.first_timer = i.first_timer;
+                account.account.language = i.language;
+                account.account.level = i.level || 0;
+                account.assignRoles(i);
+                $.getJSON("/1.0/player/" + account.account.username + "/stats", function(t) {
                     Profile.updateAlwaysVisibleStats({
                         username: i.username,
                         points: t.forever.points,
@@ -102,11 +102,11 @@ function ExtraStats() {
                         scythes: t.forever.scythes,
                         complete: t.forever.complete
                     });
-                    window.account.account.stats = t;
+                    account.account.stats = t;
                 });
                 $("#acc").html($("#logoutButtons").html());
                 if(t) t.call(this);
-                $(window).trigger("account-info-ready", [window.account]);
+                $(document).trigger("account-info-ready", [account]);
             }
         });
     };
@@ -116,7 +116,7 @@ function ExtraStats() {
             if(!isBigEnough) {
                 isBigEnough = true;
 
-                window.clearTimeout(currentTimeout);
+                clearTimeout(currentTimeout);
                 firstSet.css("visibility", "visible");
                 firstSet.css("opacity", "1");
                 if(secondSet) {
@@ -137,24 +137,24 @@ function ExtraStats() {
         }
     }
 
-    $(window).on("ewdlc-account-ready", function() {
-        if(window.ewdlc.account.isScout()) {
+    $(document).on("ewdlc-account-ready", function() {
+        if(ewdlc.account.isScout()) {
             addStat("scytheIcon", "scythedCubes", "Cubes Scythed");
             secondSet = $("#funStats div").slice(6, 8);
         }
-        if(window.ewdlc.account.isScythe()) {
+        if(ewdlc.account.isScythe()) {
             addStat("completedCubesIcon", "completedCubes", "Cubes Completed");
             secondSet = $("#funStats div").slice(6, 10);
         }
         checkWindowWidth();
-        window.account.refresh();
+        account.refresh();
     });
 
-    $(window).resize(checkWindowWidth);
+    $(document).resize(checkWindowWidth);
 }
 
 function ExtraStatsInit() {
-    window.ewdlc.modules.extraStats = window.ewdlc.modules.extraStats || new ExtraStats();
+    ewdlc.modules.extraStats = ewdlc.modules.extraStats || new ExtraStats();
 }
 
 export {ExtraStats}
