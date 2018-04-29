@@ -8,7 +8,7 @@ function ExtraControls() {
     var _settingsReady = $.Deferred();
 
     function jumpToCell() {
-        if (!ewdlc.account.isMystic()) return;
+        if (!account.can('mystic admin')) return;
 
         let $jumpContainer = $("#jumpContainer").clone().detach();
         let $input = $jumpContainer.find("input");
@@ -188,11 +188,12 @@ function ExtraControls() {
     });
 
     $.when(_accountReady, _settingsReady).then(function() {
-        if(ewdlc.account.isScout()) {
+        if(account.can('scout scythe mystic admin')) {
             ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge in-cube buttons");
         }
 
-        if(ewdlc.account.isScythe() || !ewdlc.account.isScout()) return;
+        // if(ewdlc.account.isScythe() || !ewdlc.account.isScout()) return;
+        if (account.can('scythe mystic admin')) return;
 
         _swapMoveOnAndFlag.registerCallback(toggleSwappedButtons);
         ewdlc.settingsUi.makeCheckbox(_swapMoveOnAndFlag, "Swap move on/flag buttons");

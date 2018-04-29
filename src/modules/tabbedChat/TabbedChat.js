@@ -360,23 +360,22 @@ function TabbedChat() {
 
     // Add any tab per role
     function _addRoleTabs() {
-        let account = ewdlc.account;
-        if(account.isScythe()) {
+        if(account.can('scythe mystic admin')) {
             _this.addTab("Commands", "", "");
         }
-        if(account.isScout()) {
+        if(account.can('scout scythe mystic admin')) {
             _this.addTab("Scouts", "/gm scouts ", "(scouts)");
         }
-        if(account.isMystic()) {
+        if(account.can('mystic admin')) {
             _this.addTab("Mystics", "/gm mystics ", "(mystics)");
         }
-        if(account.isModerator()) {
+        if(account.can('moderator admin')) {
             _this.addTab("Mods", "/gm mods ", "(mods)");
         }
-        if(account.isMentor()) {
+        if(account.can('mentor admin')) {
             _this.addTab("Mentors", "/gm mentors ", "(mentors)");
         }
-        if(account.isAdmin()) {
+        if(account.can('admin')) {
             _this.addTab("Admins", "/gm admins ", "(admins)");
         }
 

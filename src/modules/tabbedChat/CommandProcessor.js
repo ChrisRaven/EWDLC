@@ -197,7 +197,7 @@ function CommandProcessor(tabbedChat) {
             return potentialTasks;
         };
 
-        if(!ewdlc.account.isScythe()) {
+        if(!account.can('scythe mystic admin')) {
             tomni.chat.addMsg({}, "You must be a scythe or higher to use this command.");
             return;
         }
@@ -291,7 +291,7 @@ function CommandProcessor(tabbedChat) {
     }
 
     function cubeDupes(args) {
-        if(!ewdlc.account.isScout()) {
+        if(!account.can('scout scythe mystic admin')) {
             tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
             return;
         }
@@ -332,10 +332,10 @@ function CommandProcessor(tabbedChat) {
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
     this.bind("/clear", "Clears the chat", "", clear);
-    if(ewdlc.account.isScout()) {
+    if(account.can('scout scythe mystic admin')) {
         this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
     }
-    if(ewdlc.account.isScythe()) {
+    if(account.can('scythe mystic admin')) {
         this.bind("/low-wt", "Lists low weight cubes in cell", "/low-wt [cell=this] [limit=15]", lowWt);
         this.bind("/sc-info", "Shows count of the SC you've done, the amount you can do, and lists cube IDs with SC < 2, wt >= 3", "/sc-info [cell=this] [limit=15]", scInfo);
     }

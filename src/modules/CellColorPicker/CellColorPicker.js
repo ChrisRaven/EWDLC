@@ -159,7 +159,7 @@ function CellColorPicker() {
     $(document).on("ewdlc-preferences-loaded.cellColorPicker", _settingsReady.resolve);
 
     $.when(_accountReady, _settingsReady, _spectrumReady).then(function() {
-        if(!ewdlc.account.isScout()) return;
+        if(!account.can('scout scythe mystic admin')) return;
 
         _view = new ColorPickerView($.extend({}, Cell.ScytheVisionColors));
         _view.init();

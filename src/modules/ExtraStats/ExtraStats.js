@@ -138,11 +138,11 @@ function ExtraStats() {
     }
 
     $(document).on("ewdlc-account-ready", function() {
-        if(ewdlc.account.isScout()) {
+        if(account.can('scout scythe mystic admin')) {
             addStat("scytheIcon", "scythedCubes", "Cubes Scythed");
             secondSet = $("#funStats div").slice(6, 8);
         }
-        if(ewdlc.account.isScythe()) {
+        if(account.can('scythe mystic admin')) {
             addStat("completedCubesIcon", "completedCubes", "Cubes Completed");
             secondSet = $("#funStats div").slice(6, 10);
         }

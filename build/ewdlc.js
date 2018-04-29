@@ -168,60 +168,14 @@ function Preferences(ewdlc) {
 function Account(username) {
     var _this = this;
     var _username = username;
-    var _roles = {};
     var _isReady = false;
 
     function _readAccountData(data) {
         _username = data.username;
-
-        let roles = data.roles;
-
-        if(roles.indexOf("admin") >= 0) {
-            _roles.isAdmin = true;
-        }
-        if(_roles.isAdmin || roles.indexOf("scout") >= 0) {
-            _roles.isScout = true;
-        }
-        if(_roles.isAdmin || roles.indexOf("scythe") >= 0) {
-            _roles.isScythe = true;
-        }
-        if(_roles.isAdmin || roles.indexOf("mystic") >= 0) {
-            _roles.isMystic = true;
-        }
-        if(_roles.isAdmin || roles.indexOf("moderator") >= 0) {
-            _roles.isModerator = true;
-        }
-        if(_roles.isAdmin || roles.indexOf("mentor") >= 0) {
-            _roles.isMentor = true;
-        }
     }
 
     _this.getUsername = function() {
         return _username;
-    };
-
-    _this.isScout = function() {
-        return _roles.isScout;
-    };
-
-    _this.isScythe = function() {
-        return _roles.isScythe;
-    };
-
-    _this.isMystic = function() {
-        return _roles.isMystic;
-    };
-
-    _this.isModerator = function() {
-        return _roles.isModerator;
-    };
-
-    _this.isMentor = function() {
-        return _roles.isMentor;
-    };
-
-    _this.isAdmin = function() {
-        return _roles.isAdmin;
     };
 
     _this.isReady = function() {
@@ -689,7 +643,7 @@ function CommandProcessor(tabbedChat) {
             return potentialTasks;
         };
 
-        if(!ewdlc.account.isScythe()) {
+        if(!account.can('scythe mystic admin')) {
             tomni.chat.addMsg({}, "You must be a scythe or higher to use this command.");
             return;
         }
@@ -783,7 +737,7 @@ function CommandProcessor(tabbedChat) {
     }
 
     function cubeDupes(args) {
-        if(!ewdlc.account.isScout()) {
+        if(!account.can('scout scythe mystic admin')) {
             tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
             return;
         }
@@ -824,10 +778,10 @@ function CommandProcessor(tabbedChat) {
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
     this.bind("/clear", "Clears the chat", "", clear);
-    if(ewdlc.account.isScout()) {
+    if(account.can('scout scythe mystic admin')) {
         this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
     }
-    if(ewdlc.account.isScythe()) {
+    if(account.can('scythe mystic admin')) {
         this.bind("/low-wt", "Lists low weight cubes in cell", "/low-wt [cell=this] [limit=15]", lowWt);
         this.bind("/sc-info", "Shows count of the SC you've done, the amount you can do, and lists cube IDs with SC < 2, wt >= 3", "/sc-info [cell=this] [limit=15]", scInfo);
     }
@@ -1191,23 +1145,23 @@ function TabbedChat() {
 
     // Add any tab per role
     function _addRoleTabs() {
-        let account = ewdlc.account;
-        if(account.isScythe()) {
+        // let account = ewdlc.account;
+        if(account.can('scythe mystic admin')) {
             _this.addTab("Commands", "", "");
         }
-        if(account.isScout()) {
+        if(account.can('scout scythe mystic admin')) {
             _this.addTab("Scouts", "/gm scouts ", "(scouts)");
         }
-        if(account.isMystic()) {
+        if(account.can('mystic admin')) {
             _this.addTab("Mystics", "/gm mystics ", "(mystics)");
         }
-        if(account.isModerator()) {
+        if(account.can('moderator admin')) {
             _this.addTab("Mods", "/gm mods ", "(mods)");
         }
-        if(account.isMentor()) {
+        if(account.can('mentor admin')) {
             _this.addTab("Mentors", "/gm mentors ", "(mentors)");
         }
-        if(account.isAdmin()) {
+        if(account.can('admin')) {
             _this.addTab("Admins", "/gm admins ", "(admins)");
         }
 
@@ -1577,11 +1531,11 @@ function ExtraStats() {
     }
 
     $(document).on("ewdlc-account-ready", function() {
-        if(ewdlc.account.isScout()) {
+        if(account.can('scout scythe mystic admin')) {
             addStat("scytheIcon", "scythedCubes", "Cubes Scythed");
             secondSet = $("#funStats div").slice(6, 8);
         }
-        if(ewdlc.account.isScythe()) {
+        if(account.can('scythe mystic admin')) {
             addStat("completedCubesIcon", "completedCubes", "Cubes Completed");
             secondSet = $("#funStats div").slice(6, 10);
         }
@@ -1612,7 +1566,7 @@ function ExtraControls() {
     var _settingsReady = $.Deferred();
 
     function jumpToCell() {
-        if (!ewdlc.account.isMystic()) return;
+        if (!account.can('mystic admin')) return;
 
         let $jumpContainer = $("#jumpContainer").clone().detach();
         let $input = $jumpContainer.find("input");
@@ -1792,11 +1746,12 @@ function ExtraControls() {
     });
 
     $.when(_accountReady, _settingsReady).then(function() {
-        if(ewdlc.account.isScout()) {
+        if(account.can('scout scythe mystic admin')) {
             ewdlc.settingsUi.makeCheckbox(_enlargeButtons, "Enlarge in-cube buttons");
         }
 
-        if(ewdlc.account.isScythe() || !ewdlc.account.isScout()) return;
+        // if(ewdlc.account.isScythe() || !ewdlc.account.isScout()) return;
+        if (account.can('scythe mystic admin')) return;
 
         _swapMoveOnAndFlag.registerCallback(toggleSwappedButtons);
         ewdlc.settingsUi.makeCheckbox(_swapMoveOnAndFlag, "Swap move on/flag buttons");
@@ -2404,7 +2359,7 @@ function CellColorPicker() {
     $(document).on("ewdlc-preferences-loaded.cellColorPicker", _settingsReady.resolve);
 
     $.when(_accountReady, _settingsReady, _spectrumReady).then(function() {
-        if(!ewdlc.account.isScout()) return;
+        if(!account.can('scout scythe mystic admin')) return;
 
         _view = new ColorPickerView($.extend({}, Cell.ScytheVisionColors));
         _view.init();
