@@ -2525,11 +2525,10 @@ function initModules() {
     }
 }
 
-let ewdlc;
 $(document).ready(function () {
     if($(".gameBoard").length == 0) return;
 
-    ewdlc = window.ewdlc || new EWDLC("https://chrisraven.github.io/EWDLC/build/static");
+    window.ewdlc = new EWDLC("https://chrisraven.github.io/EWDLC/build/static");
 
     initModules();
     ewdlc.init();
