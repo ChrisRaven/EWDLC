@@ -1,5 +1,6 @@
 // ==UserScript==
 // @author     Iliyan Georgiev
+// @author     Krzysztof Kruk
 // @name       EyeWire DLC (KK)
 // @namespace  http://crazyman4865.com/eyewire
 // @version    1.0.0
