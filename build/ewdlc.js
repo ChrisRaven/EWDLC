@@ -863,7 +863,16 @@ function TabbedChat() {
         var target = scopeText.substring(1, scopeText.length - 1);
         var content = elem.find('.actualText').html();
 
-        var msg = {username: username, hasUsername: hasUsername, scopeText: scopeText, target: target, content: content};
+        var msg = {
+            username: username,
+            hasUsername: hasUsername,
+            scopeText: scopeText,
+            target: target,
+            content: content,
+            updateContent: function (newContent) {
+                elem.find('.actualText').html(newContent);
+            }
+        };
 
         return msg;
     }
@@ -1139,14 +1148,80 @@ function TabbedChat() {
         }
     }
 
-
-    function applyMarkup(txt) {console.log(txt);
-        let i = txt.length;
-        let chr;
-        while (i--) {
+    /*
+    <a href="http://google.pl" target="_blank">http://google.pl</a>
+    test <span class="taskid link">#1111</span>
+    */
+//  test: /pm KrzysztofKruk http://google.pl *_test* a
+    function applyMarkup(txt) {//console.log('input: ', txt)
+        let chr, output = '';
+        let bFlag = false, uFlag = false, iFlag = false;
+        let tagOpenStartFlag = false, tagNextFlag = false, tagOpenEndFlag = false, tagCloseStartFlag = false;
+        for (let i = 0, len = txt.length; i < len; i++) {
             chr = txt.charAt(i);
+
+            if (!tagOpenStartFlag) {
+                if (chr === '*') {
+                    output += bFlag ? '</b>' : '<b>';
+                    bFlag = !bFlag;
+                    continue;
+                }
+                if (chr === '/') {
+                    output += iFlag ? '</i>' : '<i>';
+                    iFlag = !iFlag;
+                    continue;
+                }
+                if (chr === '_') {
+                    output += uFlag ? '</u>' : '<u>';
+                    uFlag = !uFlag;
+                    continue;
+                }
+            }
+
+            if (chr === '<' && !tagOpenStartFlag) {
+                tagOpenStartFlag = true;
+                output += chr;
+                continue;
+            }
+
+            if (tagOpenStartFlag && !tagNextFlag) {
+                if (chr === 'a' || chr === 's') {
+                    tagNextFlag = true;
+                }
+                else {
+                    tagOpenStartFlag = false;
+                }
+            }
             
+            if (chr === '>' && tagNextFlag) {
+                tagOpenEndFlag = true;
+            }
+
+            if (chr === '<' && tagOpenEndFlag) {
+                tagCloseStartFlag = true;
+            }
+
+            if (chr === '>' && tagCloseStartFlag) {
+                tagOpenStartFlag = false;
+                tagNextFlag = false;
+                tagOpenEndFlag = false;
+                tagCloseStartFlag = false;
+            }
+
+            output += chr;
         }
+
+        if (bFlag) {
+            output += '</b>';
+        }
+        if (iFlag) {
+            output += '</i>';
+        }
+        if (uFlag) {
+            output += '</u>';
+        }
+// console.log('output: ', output)
+        return output;
     }
 
 
@@ -1221,7 +1296,7 @@ function TabbedChat() {
         var index;
 
         if(msg.hasUsername) {
-            applyMarkup(msg.content);
+            msg.updateContent(applyMarkup(msg.content));
             addStamp(elem);
             elem.find(".actualText").addClass("tc-msg-text");
         }

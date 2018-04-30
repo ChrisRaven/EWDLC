@@ -78,7 +78,16 @@ function TabbedChat() {
         var target = scopeText.substring(1, scopeText.length - 1);
         var content = elem.find('.actualText').html();
 
-        var msg = {username: username, hasUsername: hasUsername, scopeText: scopeText, target: target, content: content};
+        var msg = {
+            username: username,
+            hasUsername: hasUsername,
+            scopeText: scopeText,
+            target: target,
+            content: content,
+            updateContent: function (newContent) {
+                elem.find('.actualText').html(newContent);
+            }
+        };
 
         return msg;
     }
@@ -354,21 +363,76 @@ function TabbedChat() {
         }
     }
 
-
-    function applyMarkup(txt) {console.log(txt)
-        let i = txt.length;
+    function applyMarkup(txt) {
         let chr, output = '';
         let bFlag = false, uFlag = false, iFlag = false;
-        while (i--) {
+        let tagOpenStartFlag = false, tagNextFlag = false, tagOpenEndFlag = false, tagCloseStartFlag = false;
+
+        for (let i = 0, len = txt.length; i < len; i++) {
             chr = txt.charAt(i);
-            switch (chr) {
-                case '*': break; // bold
-                case '/': break; // italic
-                case '_': break; // underline
-                default:
-                  output += chr;
+
+            if (!tagOpenStartFlag) {
+                if (chr === '*') {
+                    output += bFlag ? '</b>' : '<b>';
+                    bFlag = !bFlag;
+                    continue;
+                }
+                if (chr === '/') {
+                    output += iFlag ? '</i>' : '<i>';
+                    iFlag = !iFlag;
+                    continue;
+                }
+                if (chr === '_') {
+                    output += uFlag ? '</u>' : '<u>';
+                    uFlag = !uFlag;
+                    continue;
+                }
             }
+
+            if (chr === '<' && !tagOpenStartFlag) {
+                tagOpenStartFlag = true;
+                output += chr;
+                continue;
+            }
+
+            if (tagOpenStartFlag && !tagNextFlag) {
+                if (chr === 'a' || chr === 's') {
+                    tagNextFlag = true;
+                }
+                else {
+                    tagOpenStartFlag = false;
+                }
+            }
+            
+            if (chr === '>' && tagNextFlag) {
+                tagOpenEndFlag = true;
+            }
+
+            if (chr === '<' && tagOpenEndFlag) {
+                tagCloseStartFlag = true;
+            }
+
+            if (chr === '>' && tagCloseStartFlag) {
+                tagOpenStartFlag = false;
+                tagNextFlag = false;
+                tagOpenEndFlag = false;
+                tagCloseStartFlag = false;
+            }
+
+            output += chr;
         }
+
+        if (bFlag) {
+            output += '</b>';
+        }
+        if (iFlag) {
+            output += '</i>';
+        }
+        if (uFlag) {
+            output += '</u>';
+        }
+
+        return output;
     }
 
 
@@ -420,7 +484,6 @@ function TabbedChat() {
             $("#charLeft").fadeOut(200);
         });
 
-    // $(".chatMsgContainer").bind("DOMNodeInserted", ".chatMsg",
     var mutationObserver = new MutationObserver(moCallback);
     mutationObserver.observe(document.getElementsByClassName('chatMsgContainer')[0], {
         childList: true,
@@ -432,7 +495,8 @@ function TabbedChat() {
     function moCallback(records) {
         var record = records[0];
         if (!record.addedNodes) return;
-        var elem = $(record.addedNodes[0]);//$(this).children().last();
+        var elem = $(record.addedNodes[0]);
+
         elem.find(".link.coords").on("click.tabbedChat", openCoord);
         if(elem.find(".tc-timestamp").length > 0 || elem.find(".link.coords").length > 0) return;
 
@@ -443,7 +507,7 @@ function TabbedChat() {
         var index;
 
         if(msg.hasUsername) {
-            applyMarkup(msg.content);
+            msg.updateContent(applyMarkup(msg.content));
             addStamp(elem);
             elem.find(".actualText").addClass("tc-msg-text");
         }
