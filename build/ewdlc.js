@@ -861,8 +861,9 @@ function TabbedChat() {
         var hasUsername = elem.children(".userName").length !== 0;
         var scopeText = elem.children(".dialogNobody").not(".tc-timestamp,.tc-msg-text").text().trim();
         var target = scopeText.substring(1, scopeText.length - 1);
+        var content = elem.find('.actualText').html();
 
-        var msg = {username: username, hasUsername: hasUsername, scopeText: scopeText, target: target};
+        var msg = {username: username, hasUsername: hasUsername, scopeText: scopeText, target: target, content: content};
 
         return msg;
     }
@@ -1139,13 +1140,23 @@ function TabbedChat() {
     }
 
 
+    function applyMarkup(txt) {console.log(txt);
+        let i = txt.length;
+        let chr;
+        while (i--) {
+            chr = txt.charAt(i);
+            
+        }
+    }
+
+
+
     // Add the default tab
     activeTab = _this.addTab("All", "", "");
     activeTab.setActive(true);
 
     // Add any tab per role
     function _addRoleTabs() {
-        // let account = ewdlc.account;
         if(account.can('scythe mystic admin')) {
             _this.addTab("Commands", "", "");
         }
@@ -1178,9 +1189,28 @@ function TabbedChat() {
         });
     }
 
-    chatInput.focus(function() {filterMessages(); $("#charLeft").fadeIn(200);}).focusout(function () {$("#charLeft").fadeOut(200);});
-    $(".chatMsgContainer").bind("DOMNodeInserted", ".chatMsg", function() {
-        var elem = $(this).children().last();
+    chatInput
+        .focus(function () {
+            filterMessages();
+            $("#charLeft").fadeIn(200);
+        })
+        .focusout(function () {
+            $("#charLeft").fadeOut(200);
+        });
+
+    // $(".chatMsgContainer").bind("DOMNodeInserted", ".chatMsg",
+    var mutationObserver = new MutationObserver(moCallback);
+    mutationObserver.observe(document.getElementsByClassName('chatMsgContainer')[0], {
+        childList: true,
+        attributres: false,
+        characterData: false,
+        subtree: false
+    });
+    
+    function moCallback(records) {
+        var record = records[0];
+        if (!record.addedNodes) return;
+        var elem = $(record.addedNodes[0]);//$(this).children().last();
         elem.find(".link.coords").on("click.tabbedChat", openCoord);
         if(elem.find(".tc-timestamp").length > 0 || elem.find(".link.coords").length > 0) return;
 
@@ -1191,6 +1221,7 @@ function TabbedChat() {
         var index;
 
         if(msg.hasUsername) {
+            applyMarkup(msg.content);
             addStamp(elem);
             elem.find(".actualText").addClass("tc-msg-text");
         }
@@ -1246,9 +1277,9 @@ function TabbedChat() {
         checkTabsShouldShow();
 
         chatInput.removeClass("pulsing");
-        
+
         checkCoords(elem);
-    });
+    }
 
     chatInput.off("keydown").keydown(function(e) {
         chatInput.click();
