@@ -409,7 +409,8 @@ function TabbedPrefs(callback) {
         "tc-enable-unread": new Setting("tc-enable-unread", true),
         "tc-grayout-messages": new Setting("tc-grayout-messages", false),
         "tc-show-leaderboard": new Setting("tc-show-leaderboard", true),
-        "tc-allow-backslash-prefix": new Setting("tc-allow-backslash-prefix", true)
+        "tc-allow-backslash-prefix": new Setting("tc-allow-backslash-prefix", true),
+        "tc-enable-markup": new Setting("tc-enable-markup", true)
     };
 
     var lang = [
@@ -420,7 +421,8 @@ function TabbedPrefs(callback) {
         {key: "tc-enable-unread", lang: "Unread messages counter"},
         {key: "tc-grayout-messages", lang: "Show all hidden messages as faded instead"},
         {key: "tc-show-leaderboard", lang: "Leaderboard pop-up after cube submission"},
-        {key: "tc-allow-backslash-prefix", lang: "Allow backslash as command prefix"}
+        {key: "tc-allow-backslash-prefix", lang: "Allow backslash as command prefix"},
+        {key: "tc-enable-markup", lang: "Enable markup"}
     ];
 
     var _this = this;
@@ -435,14 +437,18 @@ function TabbedPrefs(callback) {
 
     $(document).on("ewdlc-preferences-loading.tabbedChat", function() {
         for(var setting in settings) {
-            ewdlc.preferences.registerSetting(settings[setting]);
-            settings[setting].registerCallback(callback);
+            if (settings.hasOwnProperty(setting)) {
+                ewdlc.preferences.registerSetting(settings[setting]);
+                settings[setting].registerCallback(callback);
+            }
         }
     });
 
     $(document).on("ewdlc-preferences-loaded.tabbedChat", function() {
         for(let i in lang) {
-            ewdlc.settingsUi.makeCheckbox(settings[lang[i].key], lang[i].lang);
+            if (lang.hasOwnProperty(i)) {
+                ewdlc.settingsUi.makeCheckbox(settings[lang[i].key], lang[i].lang);
+            }
         }
     });
 }
@@ -1148,15 +1154,11 @@ function TabbedChat() {
         }
     }
 
-    /*
-    <a href="http://google.pl" target="_blank">http://google.pl</a>
-    test <span class="taskid link">#1111</span>
-    */
-//  test: /pm KrzysztofKruk http://google.pl *_test* a
-    function applyMarkup(txt) {//console.log('input: ', txt)
+    function applyMarkup(txt) {
         let chr, output = '';
         let bFlag = false, uFlag = false, iFlag = false;
         let tagOpenStartFlag = false, tagNextFlag = false, tagOpenEndFlag = false, tagCloseStartFlag = false;
+
         for (let i = 0, len = txt.length; i < len; i++) {
             chr = txt.charAt(i);
 
@@ -1220,7 +1222,7 @@ function TabbedChat() {
         if (uFlag) {
             output += '</u>';
         }
-// console.log('output: ', output)
+
         return output;
     }
 
@@ -1273,7 +1275,6 @@ function TabbedChat() {
             $("#charLeft").fadeOut(200);
         });
 
-    // $(".chatMsgContainer").bind("DOMNodeInserted", ".chatMsg",
     var mutationObserver = new MutationObserver(moCallback);
     mutationObserver.observe(document.getElementsByClassName('chatMsgContainer')[0], {
         childList: true,
@@ -1285,7 +1286,8 @@ function TabbedChat() {
     function moCallback(records) {
         var record = records[0];
         if (!record.addedNodes) return;
-        var elem = $(record.addedNodes[0]);//$(this).children().last();
+        var elem = $(record.addedNodes[0]);
+
         elem.find(".link.coords").on("click.tabbedChat", openCoord);
         if(elem.find(".tc-timestamp").length > 0 || elem.find(".link.coords").length > 0) return;
 
@@ -1296,7 +1298,9 @@ function TabbedChat() {
         var index;
 
         if(msg.hasUsername) {
-            msg.updateContent(applyMarkup(msg.content));
+            if (_this.prefs.get('tc-enable-markup')) {
+                msg.updateContent(applyMarkup(msg.content));
+            }
             addStamp(elem);
             elem.find(".actualText").addClass("tc-msg-text");
         }
@@ -1352,7 +1356,7 @@ function TabbedChat() {
         checkTabsShouldShow();
 
         chatInput.removeClass("pulsing");
-
+        
         checkCoords(elem);
     }
 

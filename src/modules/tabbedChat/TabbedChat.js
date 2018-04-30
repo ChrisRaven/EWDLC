@@ -507,7 +507,9 @@ function TabbedChat() {
         var index;
 
         if(msg.hasUsername) {
-            msg.updateContent(applyMarkup(msg.content));
+            if (_this.prefs.get('tc-enable-markup')) {
+                msg.updateContent(applyMarkup(msg.content));
+            }
             addStamp(elem);
             elem.find(".actualText").addClass("tc-msg-text");
         }

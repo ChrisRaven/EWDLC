@@ -1,0 +1,19 @@
+// ==UserScript==
+// @author     Iliyan Georgiev
+// @name       EyeWire DLC (KK)
+// @namespace  http://crazyman4865.com/eyewire
+// @version    1.0.0
+// @description  A script to add various functionality to EyeWire
+// @include    https://eyewire.org/*
+// @include    https://beta.eyewire.org/*
+// @exclude    https://eyewire.org/1.0/*
+// @copyright  2017+, Iliyan Georgiev
+// @run-at     document-idle
+// @grant      none
+// @source     https://github.com/crazyman4865/EWDLC
+// @supportURL https://github.com/crazyman4865/EWDLC/issues
+// @updateURL  https://crazyman4865.com/eyewire/scripts/tampermonkey/ewdlc.meta.js
+// @downloadURL  https://crazyman4865.com/eyewire/scripts/tampermonkey/ewdlc.user.js
+// ==/UserScript==
+
+

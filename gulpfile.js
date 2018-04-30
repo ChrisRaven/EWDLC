@@ -1,5 +1,6 @@
 var gulp = require("gulp");
 var rollup = require("rollup");
+var header = require("gulp-header");
 var UglifyJS = require("uglify-es");
 var fs = require("fs");
 var less = require("less");
@@ -35,7 +36,7 @@ gulp.task("build", async () => {
     if(uglifyResult.error) {    
         console.log(uglifyResult.error);
     } else {
-        fs.writeFileSync("build/ewdlc.min.js", uglifyResult.code, "utf8");
+        fs.writeFileSync("build/ewdlc.min.js", fs.readFileSync("header.txt", "utf8") + uglifyResult.code, "utf8");
         fs.writeFileSync("build/ewdlc.min.js.map", uglifyResult.map, "utf8");
     }
 
