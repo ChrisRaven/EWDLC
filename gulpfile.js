@@ -36,8 +36,8 @@ gulp.task("build", async () => {
     if(uglifyResult.error) {    
         console.log(uglifyResult.error);
     } else {
-        fs.writeFileSync("build/ewdlc.min.js", fs.readFileSync("header.txt", "utf8") + uglifyResult.code, "utf8");
-        fs.writeFileSync("build/ewdlc.min.js.map", uglifyResult.map, "utf8");
+        fs.writeFileSync("build/ewdlc.min.user.js", fs.readFileSync("header.txt", "utf8") + uglifyResult.code, "utf8");
+        fs.writeFileSync("build/ewdlc.min.user.js.map", uglifyResult.map, "utf8");
     }
 
     // LESS
