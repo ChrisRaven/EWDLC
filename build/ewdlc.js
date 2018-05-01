@@ -874,10 +874,7 @@ function TabbedChat() {
             hasUsername: hasUsername,
             scopeText: scopeText,
             target: target,
-            content: content,
-            updateContent: function (newContent) {
-                elem.find('.actualText').html(newContent);
-            }
+            contentNode: elem.find('.actualText')
         };
 
         return msg;
@@ -1154,76 +1151,42 @@ function TabbedChat() {
         }
     }
 
-    function applyMarkup(txt) {
-        let chr, output = '';
-        let bFlag = false, uFlag = false, iFlag = false;
-        let tagOpenStartFlag = false, tagNextFlag = false, tagOpenEndFlag = false, tagCloseStartFlag = false;
+    function applyMarkup(node) {
+        let children = node[0].childNodes;
+        let input;
+        for (let i = 0, len = children.length; i < len; i++) {
+            if (children[i].nodeType === 3) { // TEXT NODE
+                input = children[i].data;
 
-        for (let i = 0, len = txt.length; i < len; i++) {
-            chr = txt.charAt(i);
+                let chr, output = '';
+                let bFlag = false, uFlag = false, iFlag = false;
 
-            if (!tagOpenStartFlag) {
-                if (chr === '*') {
-                    output += bFlag ? '</b>' : '<b>';
-                    bFlag = !bFlag;
-                    continue;
+                for (let i = 0, inLen = input.length; i < inLen; i++) {
+                    chr = input.charAt(i);
+
+                    switch (chr) {
+                        case '*':
+                            output += bFlag ? '</b>' : '<b>';
+                            bFlag = !bFlag;
+                            break;
+                        case '/':
+                            output += iFlag ? '</i>' : '<i>';
+                            iFlag = !iFlag;
+                            break;
+                        case '_':
+                            output += uFlag ? '</u>' : '<u>';
+                            uFlag = !uFlag;
+                            break;
+                        default:
+                            output += chr;
+                    }
                 }
-                if (chr === '/') {
-                    output += iFlag ? '</i>' : '<i>';
-                    iFlag = !iFlag;
-                    continue;
-                }
-                if (chr === '_') {
-                    output += uFlag ? '</u>' : '<u>';
-                    uFlag = !uFlag;
-                    continue;
-                }
-            }
 
-            if (chr === '<' && !tagOpenStartFlag) {
-                tagOpenStartFlag = true;
-                output += chr;
-                continue;
+                let wrapper = document.createElement('span');
+                wrapper.innerHTML = output;
+                node[0].replaceChild(wrapper, children[i]);
             }
-
-            if (tagOpenStartFlag && !tagNextFlag) {
-                if (chr === 'a' || chr === 's') {
-                    tagNextFlag = true;
-                }
-                else {
-                    tagOpenStartFlag = false;
-                }
-            }
-            
-            if (chr === '>' && tagNextFlag) {
-                tagOpenEndFlag = true;
-            }
-
-            if (chr === '<' && tagOpenEndFlag) {
-                tagCloseStartFlag = true;
-            }
-
-            if (chr === '>' && tagCloseStartFlag) {
-                tagOpenStartFlag = false;
-                tagNextFlag = false;
-                tagOpenEndFlag = false;
-                tagCloseStartFlag = false;
-            }
-
-            output += chr;
         }
-
-        if (bFlag) {
-            output += '</b>';
-        }
-        if (iFlag) {
-            output += '</i>';
-        }
-        if (uFlag) {
-            output += '</u>';
-        }
-
-        return output;
     }
 
 
@@ -1299,7 +1262,7 @@ function TabbedChat() {
 
         if(msg.hasUsername) {
             if (_this.prefs.get('tc-enable-markup')) {
-                msg.updateContent(applyMarkup(msg.content));
+                applyMarkup(msg.contentNode);
             }
             addStamp(elem);
             elem.find(".actualText").addClass("tc-msg-text");
