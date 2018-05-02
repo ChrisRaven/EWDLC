@@ -3,7 +3,7 @@
 // @author     Krzysztof Kruk
 // @name       EyeWire DLC (KK)
 // @namespace  http://crazyman4865.com/eyewire
-// @version    1.2.0
+// @version    1.2.1
 // @description  A script to add various functionality to EyeWire
 // @include    https://eyewire.org/*
 // @include    https://beta.eyewire.org/*
@@ -13,8 +13,8 @@
 // @grant      none
 // @source     https://github.com/crazyman4865/EWDLC
 // @supportURL https://github.com/crazyman4865/EWDLC/issues
-// @updateURL  https://crazyman4865.com/eyewire/scripts/tampermonkey/ewdlc.meta.js
-// @downloadURL  https://crazyman4865.com/eyewire/scripts/tampermonkey/ewdlc.user.js
+// @updateURL  https://github.com/ChrisRaven/EWDLC/raw/master/build/ewdlc.min.user.js
+// @downloadURL  https://github.com/ChrisRaven/EWDLC/raw/master/build/ewdlc.min.user.js
 // ==/UserScript==
 
 
