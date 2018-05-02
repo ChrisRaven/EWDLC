@@ -724,12 +724,67 @@ function CommandProcessor(tabbedChat) {
     }
 
     function addCell(args) {
+        let params, id, color;
+        let originalColors;
+        let originalColorUtils_rotate;
+
+        for(let i = 1; i < args.length; i++) {
+            if (args[i].indexOf('#') !== -1) {
+                params = args[i].split('#');
+                id = parseInt(params[0], 10);
+                color = params[1];
+            }
+            else {
+                id = parseInt(args[i], 10);
+                color = false;
+            }
+
+            if (color) {
+                if (tomni.prefs.get('plasticize')) {
+                    originalColorUtils_rotate = ColorUtils.rotate;
+                    ColorUtils.rotate = function () {
+                        return ColorUtils.hexToRGB(color);
+                    };
+                }
+                else {
+                    originalColors = Cell.colors;
+                    Cell.colors = {
+                        custom: {
+                            rgb: ColorUtils.hexToRGB(color)
+                        }
+                    };
+                }
+            }
+
+            if(id) {
+                $.when(tomni.threeD.addCell({cellid: id, center: true}))
+                .then(function (cell) {
+                    if (tomni.prefs.get('plasticize')) {
+                        ColorUtils.rotate = originalColorUtils_rotate;
+                    }
+                    else {
+                        Cell.colors = originalColors;
+                    }
+                });
+            }
+        }
+    }
+
+    function removeCell(args) {
         for(var i = 1; i < args.length; i++) {
             var id = parseInt(args[i], 10);
             if(!isNaN(id)) {
-                tomni.threeD.addCell( {cellid: id, center: true});
+                tomni.threeD.removeCell(id);
             }
         }
+    }
+
+    function hideCell() {
+        tomni.getCurrentCell().hide();
+    }
+
+    function showCell() {
+        tomni.getCurrentCell().show();
     }
 
     function cellSize(args) {
@@ -781,6 +836,9 @@ function CommandProcessor(tabbedChat) {
 
     this.bind("/help", "", "", help);
     this.bind("/add-cell", "Adds one or more cells to the overview", "/add-cell Cell ID 1 [Cell ID 2] ...", addCell);
+    this.bind("/remove-cell", "Removes one or more cells from the overview", "/remove-cell Cell ID 1 [Cell ID 2] ...", removeCell);
+    this.bind("/show-cell", "Shows the current cell (if it was hidden using /hide-cell)", "", showCell);
+    this.bind("/hide-cell", "Hides the current cell", "", hideCell);
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
     this.bind("/clear", "Clears the chat", "", clear);
