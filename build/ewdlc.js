@@ -835,7 +835,7 @@ function CommandProcessor(tabbedChat) {
     }
 
     this.bind("/help", "", "", help);
-    this.bind("/add-cell", "Adds one or more cells to the overview", "/add-cell Cell ID 1 [Cell ID 2] ...", addCell);
+    this.bind("/add-cell", "Adds one or more cells to the overview", "/add-cell Cell ID 1[#hhhhhh] [Cell ID 2[#hhhhhh]] ..., where hhhhhh is a hex color code", addCell);
     this.bind("/remove-cell", "Removes one or more cells from the overview", "/remove-cell Cell ID 1 [Cell ID 2] ...", removeCell);
     this.bind("/show-cell", "Shows the current cell (if it was hidden using /hide-cell)", "", showCell);
     this.bind("/hide-cell", "Hides the current cell", "", hideCell);
