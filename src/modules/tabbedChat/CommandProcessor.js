@@ -271,6 +271,75 @@ function CommandProcessor(tabbedChat) {
             .fail(err);
     }
 
+    function lowWtSC(args) {
+        // source: https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript#comment77733737_1885569
+        let intersection = function (a1, a2) {
+            return a1.filter(n => a2.includes(n));
+        }
+
+        if(!account.can('scythe mystic admin')) {
+            tomni.chat.addMsg({}, "You must be a scythe or higher to use this command.");
+            return;
+        }
+
+        var result = getCellLimit(args);
+
+        if(result.cellId < 0) {
+            return;
+        }
+
+        var cellId = result.cellId;
+        var limit = result.limit;
+
+        if(args.length > 3) {
+            return;
+        }
+
+        tomni.chat.history.add(args.join(' '));
+
+
+        $.when($.getJSON("/1.0/cell/" + cellId + "/heatmap/low-weight?weight=3"),
+               $.getJSON("/1.0/cell/" + cellId + "/tasks/complete/player"))
+            .done(function (lowWt, completeData) {
+                lowWt = lowWt[0];
+                completeData = completeData[0];
+
+                let myTasks = completeData.scythe[account.account.uid.toString()] || [];
+                myTasks = myTasks.concat(completeData.admin[account.account.uid.toString()] || []);
+
+                let ids = [];
+                for (let i = 0; i < 3; i++) {
+                    let wts = lowWt[i];
+                    for (let j = 0; j < wts.length; j++) {
+                        ids.push(wts[j].task_id);
+                    }
+                }
+
+                let result = intersection(myTasks, ids);
+
+                var count = 0;
+
+                var msg = "Low weight SC info for cell " + cellId + " (limit " + limit + "):\n";
+                msg += "Cubes you completed with low weight: " + result.length + "\n";
+
+                if(result.length > 0) {
+                    msg += "List:\n ";
+
+                    for(var i = 0; i < result.length; i++) {
+                        msg += "#" + result[i] + " ";
+
+                        count++;
+                        if(count === limit)
+                            break;
+                    }
+                }
+
+                tomni.chat.addMsg({}, msg);
+            })
+            .fail(err);
+    }
+
+    
     function addCell(args) {
         let params, id, color;
         let originalColors;
@@ -396,6 +465,7 @@ function CommandProcessor(tabbedChat) {
     if(account.can('scythe mystic admin')) {
         this.bind("/low-wt", "Lists low weight cubes in cell", "/low-wt [cell=this] [limit=15]", lowWt);
         this.bind("/sc-info", "Shows count of the SC you've done, the amount you can do, and lists cube IDs with SC < 2, wt >= 3", "/sc-info [cell=this] [limit=15]", scInfo);
+        this.bind("/low-wt-sc", "Shows count and list of the SC you've done, where wt < 3", "/low-wt-sc [cell=this] [limit=15]", lowWtSC);
     }
 }
 

@@ -378,7 +378,7 @@ function TabbedChat() {
                             output += bFlag ? '</b>' : '<b>';
                             bFlag = !bFlag;
                             break;
-                        case '/':
+                        case '|':
                             output += iFlag ? '</i>' : '<i>';
                             iFlag = !iFlag;
                             break;
