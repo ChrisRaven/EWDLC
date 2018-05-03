@@ -621,13 +621,13 @@ function TabbedChat() {
 function TabbedChatInit() {
     $("<link>").attr("rel", "stylesheet")
                .attr("type", "text/css")
-               .attr("href", ewdlc.getResourceUrl("/css/ewdlc.min.css"))
+               .attr("href", ewdlc.getResourceUrl("/css/ewdlc.min.css?v=2"))
                .appendTo("head");
 
     var interval = setInterval(function() {
         var found = false;
         for(var i = 0; i < document.styleSheets.length; i++) {
-            if(document.styleSheets[i].href && document.styleSheets[i].href.includes("/css/ewdlc.min.css"))
+            if(document.styleSheets[i].href && document.styleSheets[i].href.includes("/css/ewdlc.min.css?v=2"))
                 found = true;
         }
 
