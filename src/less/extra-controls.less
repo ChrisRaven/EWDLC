@@ -81,3 +81,35 @@
         background-image: url("@{resource-url}/img/brush-size-dec.svg")
     }
 }
+
+#additionalJumpContainer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background: url(https://chrisraven.github.io/EWDLC/build/static/img/UI_PATH_JUMP_fh.svg) no-repeat 0;
+    background-position: right;
+    margin-left: 0px;
+    width: 230px;
+
+    input {
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        width: 0;
+        height: 100%;
+        width: 80px;
+        color: #bfbfbf;
+        background: none;
+        border: none;
+        outline: none;
+        font-size: 13px;
+        margin-left: 70px;
+    }
+
+    input::placeholder {
+        color: #bfbfbf;
+    }
+}

@@ -13,10 +13,10 @@ function ExtraControls() {
         let $jumpContainer = $("#jumpContainer").clone().detach();
         let $input = $jumpContainer.find("input");
         let $button = $jumpContainer.find("button");
+        $jumpContainer[0].id = 'additionalJumpContainer';
+        $button.insertBefore($input);
 
         // Modify the attributes
-        $jumpContainer.css("margin-left", "8px");
-
         $input.attr("placeholder", "Enter Cell #");
         $input.attr("id", "cellJumpField");
 
