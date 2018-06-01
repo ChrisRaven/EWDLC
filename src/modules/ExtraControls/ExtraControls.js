@@ -110,7 +110,7 @@ function ExtraControls() {
 
         observer.observe($twoD.get(0), {attributes: true});
 
-        var $button = $("<div>").attr("title", "Toggle spawn borders (b)").addClass("fob").text("SB")
+        var $button = $("<div>").attr("title", "Toggle spawn borders (b)").addClass("fob").text("SB")//.addClass("fob show-borders")
         .click(function(e) {
             e.stopPropagation();
             SFX.play("button");
@@ -147,6 +147,13 @@ function ExtraControls() {
         });
     }
 
+    function resetCubePositionControls() {
+        $('.twoD-controls').append('<div id="reset-cube-position" title="Reset cube position" class="fob reset-cube-position"></div>');
+        $('#reset-cube-position').click(function (e) {
+            resetCubePosition();
+        });
+    }
+
     function toggleEnlargedButtons(name, value) {
         $(".reapAuxButton").toggleClass("tcEnlargeButtons", value);
         $("#editActions").toggleClass("tcEnlargeButtons", value);
@@ -168,11 +175,52 @@ function ExtraControls() {
 
         toggleEnlargedButtons("", _enlargeButtons.getValue());
     }
+/*
+    camera.fov = cameraProps.fov;
+    camera.position.set(cameraProps.position.x, cameraProps.position.y, cameraProps.position.z);
+    camera.rotation.set(cameraProps.rotation.x, cameraProps.rotation.y, cameraProps.rotation.z);
+    camera.up.set(cameraProps.up.x, cameraProps.up.y, cameraProps.up.z);
+    tomni.center.rotation.set(tomniRotation.x, tomniRotation.y, tomniRotation.z);
+    tomni.threeD.zoom = threeDZoom;
+    camera.updateProjectionMatrix();
+    tomni.forceRedraw();*/
+
+
+    function resetCubePosition() {
+        let camera = tomni.threeD.getCamera();
+        camera.fov = 40;
+        let center = tomni.getCurrentCell().getCenter();
+        let shift = tomni.getCurrentCell().info.dataset_id === 1 ? 256 : 2014;
+        switch (tomni.twoD.axis) {
+            case 'x':
+                camera.position.set(-500, 0, 0);
+                camera.up.set(0, 0, -1);
+                // tomni.center.rotation.set(center.x + shift, center.y, center.z);
+                break;
+            case 'y':
+                camera.position.set(0, 500, 0);
+                camera.up.set(0, 0, -1);
+                // tomni.center.rotation.set(center.x, center.y + shift, center.z);
+                break;
+            case 'z':
+                camera.position.set(0, 0, -500);
+                camera.up.set(0, -1, 0);
+                // tomni.center.rotation.set(center.x, center.y, center.z + shift);
+                break;
+        }
+
+        camera.rotation.set(0, 1, 1);
+        tomni.center.rotation = tomni.getCurrentCell().getCenter();//.set(1, 1, 1);
+        tomni.threeD.zoom = 750;
+        camera.updateProjectionMatrix();
+        tomni.forceRedraw();
+    }
 
     $(document).on("ewdlc-account-ready", function() {
         jumpToCell();
         brushControls();
         borderControls();
+        // resetCubePositionControls();
 
         _accountReady.resolve();
     });

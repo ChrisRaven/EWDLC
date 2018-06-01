@@ -35,7 +35,7 @@ function TabbedPrefs(callback) {
         return settings[setting].getValue();
     };
 
-    $(document).on("ewdlc-preferences-loading.tabbedChat", function() {
+    $(document).on("ewdlc-preferences-loading", function() {
         for(var setting in settings) {
             if (settings.hasOwnProperty(setting)) {
                 ewdlc.preferences.registerSetting(settings[setting]);
@@ -44,7 +44,7 @@ function TabbedPrefs(callback) {
         }
     });
 
-    $(document).on("ewdlc-preferences-loaded.tabbedChat", function() {
+    $(document).on("ewdlc-preferences-loaded", function() {
         for(let i in lang) {
             if (lang.hasOwnProperty(i)) {
                 ewdlc.settingsUi.makeCheckbox(settings[lang[i].key], lang[i].lang);

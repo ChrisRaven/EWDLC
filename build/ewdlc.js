@@ -435,7 +435,7 @@ function TabbedPrefs(callback) {
         return settings[setting].getValue();
     };
 
-    $(document).on("ewdlc-preferences-loading.tabbedChat", function() {
+    $(document).on("ewdlc-preferences-loading", function() {
         for(var setting in settings) {
             if (settings.hasOwnProperty(setting)) {
                 ewdlc.preferences.registerSetting(settings[setting]);
@@ -444,7 +444,7 @@ function TabbedPrefs(callback) {
         }
     });
 
-    $(document).on("ewdlc-preferences-loaded.tabbedChat", function() {
+    $(document).on("ewdlc-preferences-loaded", function() {
         for(let i in lang) {
             if (lang.hasOwnProperty(i)) {
                 ewdlc.settingsUi.makeCheckbox(settings[lang[i].key], lang[i].lang);
@@ -1651,7 +1651,7 @@ function ExtraStats() {
                 $("#funStats #completedCubes").text(i(t.complete));
             }
         }
-        $("#profileButton a").text(t.username);
+        $("#acc").text(t.username);
     };
 
     tomni.taskManager.ui.modeSet = function() {
@@ -1869,7 +1869,7 @@ function ExtraControls() {
 
         observer.observe($twoD.get(0), {attributes: true});
 
-        var $button = $("<div>").attr("title", "Toggle spawn borders (b)").addClass("fob").text("SB")
+        var $button = $("<div>").attr("title", "Toggle spawn borders (b)").addClass("fob").text("SB")//.addClass("fob show-borders")
         .click(function(e) {
             e.stopPropagation();
             SFX.play("button");
@@ -1927,11 +1927,22 @@ function ExtraControls() {
 
         toggleEnlargedButtons("", _enlargeButtons.getValue());
     }
+/*
+    camera.fov = cameraProps.fov;
+    camera.position.set(cameraProps.position.x, cameraProps.position.y, cameraProps.position.z);
+    camera.rotation.set(cameraProps.rotation.x, cameraProps.rotation.y, cameraProps.rotation.z);
+    camera.up.set(cameraProps.up.x, cameraProps.up.y, cameraProps.up.z);
+    tomni.center.rotation.set(tomniRotation.x, tomniRotation.y, tomniRotation.z);
+    tomni.threeD.zoom = threeDZoom;
+    camera.updateProjectionMatrix();
+    tomni.forceRedraw();*/
+
 
     $(document).on("ewdlc-account-ready", function() {
         jumpToCell();
         brushControls();
         borderControls();
+        // resetCubePositionControls();
 
         _accountReady.resolve();
     });

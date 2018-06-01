@@ -57,7 +57,7 @@ function ExtraStats() {
                 $("#funStats #completedCubes").text(i(t.complete));
             }
         }
-        $("#profileButton a").text(t.username);
+        $("#acc").text(t.username);
     };
 
     tomni.taskManager.ui.modeSet = function() {
