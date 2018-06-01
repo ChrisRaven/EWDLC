@@ -62,7 +62,11 @@
      id="rect10"
      style="fill:none;stroke:#e6edf2;stroke-width:6px;stroke-miterlimit:10" />
   <rect
+<<<<<<< HEAD
      style="opacity:1;fill:none;fill-opacity:1;stroke:#e6edf2;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+=======
+     style="opacity:1;fill:none;fill-opacity:1;stroke:#e6edf2;stroke-width:0.78992128;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+>>>>>>> 6e4e7d58390f7f0a16e5263611a2e66a84f70304
      id="rect4571"
      width="38.008476"
      height="38.008476"
