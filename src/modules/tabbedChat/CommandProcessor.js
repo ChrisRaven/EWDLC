@@ -451,6 +451,22 @@ function CommandProcessor(tabbedChat) {
         tomni.chat.submitChatMessage(msg);
     }
 
+    function markup() {
+        tomni.chat.addMsg({}, 'Type: ・・Some text・・ to apply markup.');
+        tomni.chat.addMsg({}, ' ');
+        tomni.chat.addMsg({}, '"・・" cany be any of the following: ');
+        tomni.chat.addMsg({}, '**    bold');
+        tomni.chat.addMsg({}, '||    italic');
+        tomni.chat.addMsg({}, '__    underline');
+        tomni.chat.addMsg({}, '--    strikethrough');
+        tomni.chat.addMsg({}, ' ');
+        tomni.chat.addMsg({}, 'e.g. __text__ will give you "text" word underlined.');
+        tomni.chat.addMsg({}, ' ');
+        tomni.chat.addMsg({}, 'Symbols CAN be combined, e.g. **a ||b** c||');
+        tomni.chat.addMsg({}, 'will give you bold "a", bold & cursive "b" and cursive "c"');
+        tomni.chat.addMsg({}, ' ');
+    }
+
     this.bind("/help", "", "", help);
     this.bind("/add-cell", "Adds one or more cells to the overview", "/add-cell Cell ID 1[#hhhhhh] [Cell ID 2[#hhhhhh]] ..., where hhhhhh is a hex color code", addCell);
     this.bind("/remove-cell", "Removes one or more cells from the overview", "/remove-cell Cell ID 1 [Cell ID 2] ...", removeCell);
@@ -459,6 +475,7 @@ function CommandProcessor(tabbedChat) {
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
     this.bind("/clear", "Clears the chat", "", clear);
+    this.bind("/markup", "Shows available markup tags", "", markup);
     if(account.can('scout scythe mystic admin')) {
         this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
     }

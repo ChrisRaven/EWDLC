@@ -19,7 +19,7 @@ function TabbedChat() {
         var tab = new Tab({name: name, prefix: prefix, scope: scope});
         container.append(tab.getElement());
         
-        tab.getElement().on("click.tabbedChat", function(e) {
+        tab.getElement().on("click.tabbedChat", function (e) {
             if(activeTab === tab) {
                 return;
             }
@@ -30,7 +30,10 @@ function TabbedChat() {
             e.stopPropagation();
 
             // Change the prefix if the chat input is empty
-            if(!chatInput.val().trim() || chatInput.val().startsWith("/pm ") || _tabs.findIndex(function(elem) {return chatInput.val().trim() === elem.getPrefix().trim();}) >= 0 ) {
+            if(!chatInput.val().trim() ||
+                chatInput.val().startsWith("/pm ") ||
+                _tabs.findIndex(function (elem) { return chatInput.val().trim() === elem.getPrefix().trim(); }) >= 0
+              ) {
                 chatInput.val(tab.getPrefix());
             }
             activeTab = tab;
@@ -40,7 +43,7 @@ function TabbedChat() {
 
             $(".chatMsgContainer").scrollTop($(".chatMsgContainer")[0].scrollHeight);
         });
-        tab.getElement().children("i").on("click.tabbedChat", function(e) {
+        tab.getElement().children("i").on("click.tabbedChat", function (e) {
             tab.close();
             _tabs[0].getElement().click();
             e.stopPropagation();
@@ -360,6 +363,24 @@ function TabbedChat() {
         }
     }
 
+
+    let flags = {
+        '*': false,
+        '|': false,
+        '_': false,
+        '-': false
+    };
+
+    function markup(char, tag, prevChr) {
+        let output = '';
+        if (prevChr === char) {
+            output = flags[char] ? '</' + tag + '>' : '<' + tag + '>';
+            flags[char] = !flags[char];
+        }
+
+        return output;
+    }
+
     function applyMarkup(node) {
         let children = node[0].childNodes;
         let input;
@@ -367,24 +388,24 @@ function TabbedChat() {
             if (children[i].nodeType === 3) { // TEXT NODE
                 input = children[i].data;
 
-                let chr, output = '';
-                let bFlag = false, uFlag = false, iFlag = false;
+                let chr = '', prevChr, output = '';
 
                 for (let i = 0, inLen = input.length; i < inLen; i++) {
+                    prevChr = chr;
                     chr = input.charAt(i);
 
                     switch (chr) {
                         case '*':
-                            output += bFlag ? '</b>' : '<b>';
-                            bFlag = !bFlag;
+                            output += markup('*', 'b', prevChr);
                             break;
                         case '|':
-                            output += iFlag ? '</i>' : '<i>';
-                            iFlag = !iFlag;
+                            output += markup('|', 'i', prevChr);
                             break;
                         case '_':
-                            output += uFlag ? '</u>' : '<u>';
-                            uFlag = !uFlag;
+                            output += markup('_', 'u', prevChr);
+                            break;
+                        case '-':
+                            output += markup('-', 'strike', prevChr);
                             break;
                         default:
                             output += chr;

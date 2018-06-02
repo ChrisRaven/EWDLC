@@ -903,6 +903,22 @@ function CommandProcessor(tabbedChat) {
         tomni.chat.submitChatMessage(msg);
     }
 
+    function markup() {
+        tomni.chat.addMsg({}, 'Type: ・・Some text・・ to apply markup.');
+        tomni.chat.addMsg({}, ' ');
+        tomni.chat.addMsg({}, '"・・" cany be any of the following: ');
+        tomni.chat.addMsg({}, '**    bold');
+        tomni.chat.addMsg({}, '||    italic');
+        tomni.chat.addMsg({}, '__    underline');
+        tomni.chat.addMsg({}, '--    strikethrough');
+        tomni.chat.addMsg({}, ' ');
+        tomni.chat.addMsg({}, 'e.g. __text__ will give you "text" word underlined.');
+        tomni.chat.addMsg({}, ' ');
+        tomni.chat.addMsg({}, 'Symbols CAN be combined, e.g. **a ||b** c||');
+        tomni.chat.addMsg({}, 'will give you bold "a", bold & cursive "b" and cursive "c"');
+        tomni.chat.addMsg({}, ' ');
+    }
+
     this.bind("/help", "", "", help);
     this.bind("/add-cell", "Adds one or more cells to the overview", "/add-cell Cell ID 1[#hhhhhh] [Cell ID 2[#hhhhhh]] ..., where hhhhhh is a hex color code", addCell);
     this.bind("/remove-cell", "Removes one or more cells from the overview", "/remove-cell Cell ID 1 [Cell ID 2] ...", removeCell);
@@ -911,6 +927,7 @@ function CommandProcessor(tabbedChat) {
     this.bind("/size", "Shows the size of the current cell", "", cellSize);
     this.bind("/guess", "Submits your current coordinates as a hunt guess", "", huntGuess);
     this.bind("/clear", "Clears the chat", "", clear);
+    this.bind("/markup", "Shows available markup tags", "", markup);
     if(account.can('scout scythe mystic admin')) {
         this.bind("/dupe", "Lists the duplicates in the current cube", "", cubeDupes);
     }
@@ -938,7 +955,7 @@ function TabbedChat() {
         var tab = new Tab({name: name, prefix: prefix, scope: scope});
         container.append(tab.getElement());
         
-        tab.getElement().on("click.tabbedChat", function(e) {
+        tab.getElement().on("click.tabbedChat", function (e) {
             if(activeTab === tab) {
                 return;
             }
@@ -949,7 +966,10 @@ function TabbedChat() {
             e.stopPropagation();
 
             // Change the prefix if the chat input is empty
-            if(!chatInput.val().trim() || chatInput.val().startsWith("/pm ") || _tabs.findIndex(function(elem) {return chatInput.val().trim() === elem.getPrefix().trim();}) >= 0 ) {
+            if(!chatInput.val().trim() ||
+                chatInput.val().startsWith("/pm ") ||
+                _tabs.findIndex(function (elem) { return chatInput.val().trim() === elem.getPrefix().trim(); }) >= 0
+              ) {
                 chatInput.val(tab.getPrefix());
             }
             activeTab = tab;
@@ -959,7 +979,7 @@ function TabbedChat() {
 
             $(".chatMsgContainer").scrollTop($(".chatMsgContainer")[0].scrollHeight);
         });
-        tab.getElement().children("i").on("click.tabbedChat", function(e) {
+        tab.getElement().children("i").on("click.tabbedChat", function (e) {
             tab.close();
             _tabs[0].getElement().click();
             e.stopPropagation();
@@ -1279,6 +1299,24 @@ function TabbedChat() {
         }
     }
 
+
+    let flags = {
+        '*': false,
+        '|': false,
+        '_': false,
+        '-': false
+    };
+
+    function markup(char, tag, prevChr) {
+        let output = '';
+        if (prevChr === char) {
+            output = flags[char] ? '</' + tag + '>' : '<' + tag + '>';
+            flags[char] = !flags[char];
+        }
+
+        return output;
+    }
+
     function applyMarkup(node) {
         let children = node[0].childNodes;
         let input;
@@ -1286,24 +1324,24 @@ function TabbedChat() {
             if (children[i].nodeType === 3) { // TEXT NODE
                 input = children[i].data;
 
-                let chr, output = '';
-                let bFlag = false, uFlag = false, iFlag = false;
+                let chr = '', prevChr, output = '';
 
                 for (let i = 0, inLen = input.length; i < inLen; i++) {
+                    prevChr = chr;
                     chr = input.charAt(i);
 
                     switch (chr) {
                         case '*':
-                            output += bFlag ? '</b>' : '<b>';
-                            bFlag = !bFlag;
+                            output += markup('*', 'b', prevChr);
                             break;
                         case '|':
-                            output += iFlag ? '</i>' : '<i>';
-                            iFlag = !iFlag;
+                            output += markup('|', 'i', prevChr);
                             break;
                         case '_':
-                            output += uFlag ? '</u>' : '<u>';
-                            uFlag = !uFlag;
+                            output += markup('_', 'u', prevChr);
+                            break;
+                        case '-':
+                            output += markup('-', 'strike', prevChr);
                             break;
                         default:
                             output += chr;
