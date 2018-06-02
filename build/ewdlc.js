@@ -1776,7 +1776,7 @@ function ExtraControls() {
         $button.insertBefore($input);
 
         // Modify the attributes
-        $input.attr("placeholder", "Enter Cell #");
+        $input.attr("placeholder", "           Enter Cell #");
         $input.attr("id", "cellJumpField");
 
         $button.attr("disabled", "true");
