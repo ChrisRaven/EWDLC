@@ -407,6 +407,9 @@ function TabbedChat() {
                         case '-':
                             output += markup('-', 'strike', prevChr);
                             break;
+                        case '<':
+                            output += '&lt;';
+                            break;
                         default:
                             output += chr;
                     }
