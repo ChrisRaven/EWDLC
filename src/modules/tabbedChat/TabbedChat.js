@@ -388,9 +388,10 @@ function TabbedChat() {
             if (children[i].nodeType === 3) { // TEXT NODE
                 input = children[i].data;
 
-                let chr = '', prevChr, output = '';
+                let chr = '', prevChr = '', prevPrevChr = '', output = '';
 
                 for (let i = 0, inLen = input.length; i < inLen; i++) {
+                    prevPrevChr = prevChr;
                     prevChr = chr;
                     chr = input.charAt(i);
 
@@ -411,6 +412,10 @@ function TabbedChat() {
                             output += '&lt;';
                             break;
                         default:
+                            // prevPrevChr, to check, if the prevChr was part of a 2-char markup, or just a regular character
+                            if (['*', '|', '_', '-'].indexOf(prevChr) !== -1 && prevPrevChr !== prevChr) {
+                                output += prevChr;
+                            }
                             output += chr;
                     }
                 }
