@@ -420,6 +420,11 @@ function TabbedChat() {
                     }
                 }
 
+                // to add last char, if it was one of those used in markup, but wasn't part of a tag
+                if (['*', '|', '_', '-'].indexOf(chr) !== -1 && prevChr !== chr) {
+                    output += chr;
+                }
+
                 let wrapper = document.createElement('span');
                 wrapper.innerHTML = output;
                 node[0].replaceChild(wrapper, children[i]);

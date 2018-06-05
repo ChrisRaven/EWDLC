@@ -127,7 +127,7 @@ function CommandProcessor(tabbedChat) {
             tomni.chat.addMsg({}, "Usage: /low-wt [cell=this] [limit=15]");
         };
 
-        if(!ewdlc.account.isScout()) {
+        if(!account.can('scout')) {
             tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
             return;
         }

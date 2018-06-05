@@ -579,7 +579,7 @@ function CommandProcessor(tabbedChat) {
             tomni.chat.addMsg({}, "Usage: /low-wt [cell=this] [limit=15]");
         };
 
-        if(!ewdlc.account.isScout()) {
+        if(!account.can('scout')) {
             tomni.chat.addMsg({}, "You must be a scout or higher to use this command.");
             return;
         }
@@ -1354,6 +1354,11 @@ function TabbedChat() {
                             }
                             output += chr;
                     }
+                }
+
+                // to add last char, if it was one of those used in markup, but wasn't part of a tag
+                if (['*', '|', '_', '-'].indexOf(chr) !== -1 && prevChr !== chr) {
+                    output += chr;
                 }
 
                 let wrapper = document.createElement('span');
