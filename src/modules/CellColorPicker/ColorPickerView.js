@@ -171,7 +171,7 @@ function ColorPickerView(_defaults) {
     }
 
     _this.getColors = function() {
-        return $.extend({}, _currentColors);
+        return $.extend({}, Cell.ScytheVisionColors, _currentColors);
     }
 
     _this.setColors = function(colors) {

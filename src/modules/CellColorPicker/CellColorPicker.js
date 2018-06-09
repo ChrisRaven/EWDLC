@@ -166,7 +166,7 @@ function CellColorPicker() {
 
         _view = new ColorPickerView($.extend({}, Cell.ScytheVisionColors));
         _view.init();
-        _view.setColors($.extend({}, Cell.ScytheVisionColors, _setting.getValue()));
+        _view.setColors($.extend({}, _setting.getValue()));
 
         let $container = _view.getContainer();
 
@@ -183,7 +183,7 @@ function CellColorPicker() {
     });
 
     $(document).on("ewdlc-preferences-loaded.cellColorPicker", function() {
-        Cell.ScytheVisionColors = _setting.getValue();
+        $.extend(Cell.ScytheVisionColors, _setting.getValue());
     });
 }
 
