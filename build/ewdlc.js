@@ -2600,7 +2600,7 @@ function CellColorPicker() {
 
         _groups.review = heatmap.review;
         _groups.frozen = heatmap.frozen;
-        _groups.scythefrozen = heatmap.scythefrozen;
+        _groups.scythefrozen = heatmap.scythe_frozen;
         _groups.duplicate = heatmap.duplicate;
     }
 

@@ -3,7 +3,7 @@
 // @author     Krzysztof Kruk
 // @name       EyeWire DLC (KK)
 // @namespace  http://crazyman4865.com/eyewire
-// @version    1.3.5
+// @version    1.3.5.1
 // @description  A script to add various functionality to EyeWire
 // @include    https://eyewire.org/*
 // @include    https://beta.eyewire.org/*
