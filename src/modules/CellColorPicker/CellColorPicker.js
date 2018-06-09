@@ -45,7 +45,8 @@ function CellColorPicker() {
                 "review",
                 "reap",
                 "duplicate",
-                "frozen"
+                "frozen",
+                "scythefrozen"
             ];
         } else {
             _order = [
@@ -56,7 +57,8 @@ function CellColorPicker() {
                 "scythed",
                 "reap",
                 "duplicate",
-                "frozen"
+                "frozen",
+                "scythefrozen"
             ]
         }
 
@@ -134,6 +136,7 @@ function CellColorPicker() {
 
         _groups.review = heatmap.review;
         _groups.frozen = heatmap.frozen;
+        _groups.scythefrozen = heatmap.scythefrozen;
         _groups.duplicate = heatmap.duplicate;
     }
 

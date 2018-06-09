@@ -2283,6 +2283,7 @@ function ColorPickerView(_defaults) {
         {key: "scythed", lang: "Scythed"},
         {key: "reap", lang: "Reaped"},
         {key: "frozen", lang: "Frozen"},
+        {key: "scythefrozen", lang: "Scythe Frozen"},
         {key: "duplicate", lang: "Duplicate"},
         {key: "base", lang: "Base"}
     ];
@@ -2508,7 +2509,8 @@ function CellColorPicker() {
                 "review",
                 "reap",
                 "duplicate",
-                "frozen"
+                "frozen",
+                "scythefrozen"
             ];
         } else {
             _order = [
@@ -2519,7 +2521,8 @@ function CellColorPicker() {
                 "scythed",
                 "reap",
                 "duplicate",
-                "frozen"
+                "frozen",
+                "scythefrozen"
             ];
         }
 
@@ -2597,6 +2600,7 @@ function CellColorPicker() {
 
         _groups.review = heatmap.review;
         _groups.frozen = heatmap.frozen;
+        _groups.scythefrozen = heatmap.scythefrozen;
         _groups.duplicate = heatmap.duplicate;
     }
 

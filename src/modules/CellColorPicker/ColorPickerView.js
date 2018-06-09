@@ -25,6 +25,7 @@ function ColorPickerView(_defaults) {
         {key: "scythed", lang: "Scythed"},
         {key: "reap", lang: "Reaped"},
         {key: "frozen", lang: "Frozen"},
+        {key: "scythefrozen", lang: "Scythe Frozen"},
         {key: "duplicate", lang: "Duplicate"},
         {key: "base", lang: "Base"}
     ];
