@@ -10,7 +10,8 @@ function TabbedPrefs(callback) {
         "tc-grayout-messages": new Setting("tc-grayout-messages", false),
         "tc-show-leaderboard": new Setting("tc-show-leaderboard", true),
         "tc-allow-backslash-prefix": new Setting("tc-allow-backslash-prefix", true),
-        "tc-enable-markup": new Setting("tc-enable-markup", true)
+        "tc-enable-markup": new Setting("tc-enable-markup", true),
+        "tc-show-connection-statuses": new Setting("tc-show-connection-statuses", false)
     };
 
     var lang = [
@@ -22,7 +23,8 @@ function TabbedPrefs(callback) {
         {key: "tc-grayout-messages", lang: "Show all hidden messages as faded instead"},
         {key: "tc-show-leaderboard", lang: "Leaderboard pop-up after cube submission"},
         {key: "tc-allow-backslash-prefix", lang: "Allow backslash as command prefix"},
-        {key: "tc-enable-markup", lang: "Enable markup"}
+        {key: "tc-enable-markup", lang: "Enable markup"},
+        {key: "tc-show-connection-statuses", lang: "Show connection statuses"}
     ]
 
     var _this = this;

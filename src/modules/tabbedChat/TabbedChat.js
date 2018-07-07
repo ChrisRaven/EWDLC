@@ -1,6 +1,7 @@
 import {Tab} from "./Tab.js"
 import {TabbedPrefs} from "./TabbedPrefs.js"
 import {CommandProcessor} from "./CommandProcessor.js"
+import {Setting} from "../../framework/Setting.js"
 
 /* global Keycodes:false */
 
@@ -650,7 +651,33 @@ function TabbedChat() {
     $("<div>").addClass("charLeftContainer").insertAfter(".chatInput").append($("<span>").text("180").attr("id", "charLeft").hide());
     $(".chatInput").on("input.tabbedChat change.tabbedChat", setRemainingChars);
     setInterval(setRemainingChars, 500); // hack to still update remaining chars if the textarea's value gets set using .val()
+
+    ws.onmessage = function (evt) {
+      let data = evt.data;
+
+      if(!_this.prefs.get("tc-show-connection-statuses")) {
+        return;
+      }
+
+      if (!data) {
+        return;
+      }
+      
+      data = JSON.parse(data);
+      
+      if (data.cmd === 'alert') {
+        if (data.params.type === 'connect') {
+          tomni.chat.addMsg(null, data.params.attr.username + ' has joined!');
+        }
+        else if (data.params.type === 'disconnect') {
+          tomni.chat.addMsg(null, data.params.attr.username + ' has left!');
+        }
+      }
+      
+    };
 }
+
+let ws;
 
 function TabbedChatInit() {
     $("<link>").attr("rel", "stylesheet")
@@ -672,6 +699,8 @@ function TabbedChatInit() {
     }, 500);
 
     $('<script>', {src: 'https://use.fontawesome.com/7745d29f5b.js'}).appendTo('body');
+
+    ws = new WebSocket('wss://eyewire.org/chat');
 
     ewdlc.modules.tabbedChat = ewdlc.modules.tabbedChat || new TabbedChat();
 }
