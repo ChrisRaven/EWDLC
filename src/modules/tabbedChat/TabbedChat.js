@@ -96,7 +96,8 @@ function TabbedChat() {
     function isPointMsg(text) {
         return (text.includes(" earned ") && text.includes(" points")) ||
             text.includes(" trailblazed a cube") || text.includes(" scythed a cube for") ||
-            text.includes(" scouted a cube for");
+            text.includes(" scouted a cube for") ||
+            text.includes(" has joined!") || text.includes(" has left!");
     }
 
     function checkTabsShouldShow() {
