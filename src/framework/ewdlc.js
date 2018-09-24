@@ -19,9 +19,16 @@ function EWDLC(staticDir) {
         if(_isInit) return;
 
         _this.preferences.init();
-        _this.account.refreshInfo().then(() => $(document).trigger("ewdlc-account-ready"));
+        let intv = setInterval(function () {
+          if (typeof account === 'undefined' || !account.account.uid) {
+            return;
+          }
 
-        _isInit = true;
+          clearInterval(intv);
+          $(document).trigger('ewdlc-account-ready');
+          _this.account.setReady(true);
+          _isInit = true;
+        }, 50);
     };
 
     _this.getResourceUrl = function(resource) {
