@@ -1580,6 +1580,7 @@ function TabbedChat() {
 
     ws.onmessage = function (evt) {
       let data = evt.data;
+      let username;
 
       if(!_this.prefs.get("tc-show-connection-statuses")) {
         return;
@@ -1592,11 +1593,16 @@ function TabbedChat() {
       data = JSON.parse(data);
       
       if (data.cmd === 'alert') {
+        username = data.params.attr.username;
+        if (username === 'LynneC' || username === 'KrzysztofKruk') {
+          return;
+        }
+
         if (data.params.type === 'connect') {
-          tomni.chat.addMsg(null, data.params.attr.username + ' has joined!');
+          tomni.chat.addMsg(null, username + ' has joined!');
         }
         else if (data.params.type === 'disconnect') {
-          tomni.chat.addMsg(null, data.params.attr.username + ' has left!');
+          tomni.chat.addMsg(null, username + ' has left!');
         }
       }
       
