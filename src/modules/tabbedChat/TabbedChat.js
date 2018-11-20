@@ -407,15 +407,15 @@ function TabbedChat() {
                         case '_':
                             output += markup('_', 'u', prevChr);
                             break;
-                        case '-':
-                            output += markup('-', 'strike', prevChr);
+                        case '~':
+                            output += markup('~', 'strike', prevChr);
                             break;
                         case '<':
                             output += '&lt;';
                             break;
                         default:
                             // prevPrevChr, to check, if the prevChr was part of a 2-char markup, or just a regular character
-                            if (['*', '|', '_', '-'].indexOf(prevChr) !== -1 && prevPrevChr !== prevChr) {
+                            if (['*', '|', '_', '~'].indexOf(prevChr) !== -1 && prevPrevChr !== prevChr) {
                                 output += prevChr;
                             }
                             output += chr;
@@ -462,6 +462,14 @@ function TabbedChat() {
         }
 
         checkTabsShouldShow();
+
+        let prefs = localStorage.getItem('ewdlc-prefs');
+        if (prefs) {
+            prefs = JSON.parse(prefs);
+            if(!prefs['tc-command-tab']) {
+                $('#tc-Commands').hide();
+            }
+        }
     }
     
     if(ewdlc && ewdlc.account.isReady()) {
@@ -710,6 +718,7 @@ function TabbedChatInit() {
     ws = new WebSocket('wss://eyewire.org/chat');
 
     ewdlc.modules.tabbedChat = ewdlc.modules.tabbedChat || new TabbedChat();
+
 }
 
 export {TabbedChatInit}

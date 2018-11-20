@@ -305,7 +305,7 @@ function Tab(options) {
 
     var _this = this;
     var _$textElem = $("<span>").text(_name);
-    var _$tabElem = $("<div>").addClass("chatTab").append(_$textElem)
+    var _$tabElem = $("<div id='tc-" + options.name + "'>").addClass("chatTab").append(_$textElem)
     .append($("<span>").css("margin-left", "3px").addClass("sl-badge").text("0").hide())
     .append($("<i>").addClass("fa").addClass("fa-close").css("margin-left", "3px").hide());
 
@@ -402,7 +402,8 @@ function TabbedPrefs(callback) {
         "tc-grayout-messages": new Setting("tc-grayout-messages", false),
         "tc-allow-backslash-prefix": new Setting("tc-allow-backslash-prefix", true),
         "tc-enable-markup": new Setting("tc-enable-markup", true),
-        "tc-show-connection-statuses": new Setting("tc-show-connection-statuses", false)
+        "tc-show-connection-statuses": new Setting("tc-show-connection-statuses", false),
+        "tc-command-tab": new Setting("tc-command-tab", true)
     };
 
     var lang = [
@@ -415,7 +416,8 @@ function TabbedPrefs(callback) {
         {key: "tc-grayout-messages", lang: "All hidden messages as faded"},
         {key: "tc-allow-backslash-prefix", lang: "Backslash as command prefix"},
         {key: "tc-enable-markup", lang: "Markup"},
-        {key: "tc-show-connection-statuses", lang: "Connection statuses"}
+        {key: "tc-show-connection-statuses", lang: "Connection statuses"},
+        {key: "tc-command-tab", lang: "Command tab"}
     ];
 
     var _this = this;
@@ -1335,15 +1337,15 @@ function TabbedChat() {
                         case '_':
                             output += markup('_', 'u', prevChr);
                             break;
-                        case '-':
-                            output += markup('-', 'strike', prevChr);
+                        case '~':
+                            output += markup('~', 'strike', prevChr);
                             break;
                         case '<':
                             output += '&lt;';
                             break;
                         default:
                             // prevPrevChr, to check, if the prevChr was part of a 2-char markup, or just a regular character
-                            if (['*', '|', '_', '-'].indexOf(prevChr) !== -1 && prevPrevChr !== prevChr) {
+                            if (['*', '|', '_', '~'].indexOf(prevChr) !== -1 && prevPrevChr !== prevChr) {
                                 output += prevChr;
                             }
                             output += chr;
@@ -1390,6 +1392,14 @@ function TabbedChat() {
         }
 
         checkTabsShouldShow();
+
+        let prefs = localStorage.getItem('ewdlc-prefs');
+        if (prefs) {
+            prefs = JSON.parse(prefs);
+            if(!prefs['tc-command-tab']) {
+                $('#tc-Commands').hide();
+            }
+        }
     }
     
     if(ewdlc && ewdlc.account.isReady()) {
@@ -1635,6 +1645,7 @@ function TabbedChatInit() {
     ws = new WebSocket('wss://eyewire.org/chat');
 
     ewdlc.modules.tabbedChat = ewdlc.modules.tabbedChat || new TabbedChat();
+
 }
 
 

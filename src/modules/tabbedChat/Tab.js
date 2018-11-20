@@ -9,7 +9,7 @@ function Tab(options) {
 
     var _this = this;
     var _$textElem = $("<span>").text(_name);
-    var _$tabElem = $("<div>").addClass("chatTab").append(_$textElem)
+    var _$tabElem = $("<div id='tc-" + options.name + "'>").addClass("chatTab").append(_$textElem)
     .append($("<span>").css("margin-left", "3px").addClass("sl-badge").text("0").hide())
     .append($("<i>").addClass("fa").addClass("fa-close").css("margin-left", "3px").hide());
 

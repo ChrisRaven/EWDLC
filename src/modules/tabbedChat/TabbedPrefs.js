@@ -11,7 +11,8 @@ function TabbedPrefs(callback) {
         "tc-grayout-messages": new Setting("tc-grayout-messages", false),
         "tc-allow-backslash-prefix": new Setting("tc-allow-backslash-prefix", true),
         "tc-enable-markup": new Setting("tc-enable-markup", true),
-        "tc-show-connection-statuses": new Setting("tc-show-connection-statuses", false)
+        "tc-show-connection-statuses": new Setting("tc-show-connection-statuses", false),
+        "tc-command-tab": new Setting("tc-command-tab", true)
     };
 
     var lang = [
@@ -24,7 +25,8 @@ function TabbedPrefs(callback) {
         {key: "tc-grayout-messages", lang: "All hidden messages as faded"},
         {key: "tc-allow-backslash-prefix", lang: "Backslash as command prefix"},
         {key: "tc-enable-markup", lang: "Markup"},
-        {key: "tc-show-connection-statuses", lang: "Connection statuses"}
+        {key: "tc-show-connection-statuses", lang: "Connection statuses"},
+        {key: "tc-command-tab", lang: "Command tab"}
     ]
 
     var _this = this;
